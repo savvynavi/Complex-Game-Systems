@@ -8,6 +8,7 @@
 #include "GameMessages.h"
 #include "GameObject.h"
 #include"Input.h"
+#include<unordered_map>
 
 class Client : public aie::Application {
 public:
@@ -44,4 +45,6 @@ protected:
 
 	GameObject m_gameObject;
 	int m_clientID;
+
+	std::unordered_map<int, GameObject> m_otherClientGameObjects;
 };

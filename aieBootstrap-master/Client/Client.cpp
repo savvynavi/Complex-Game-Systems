@@ -78,6 +78,9 @@ void Client::draw() {
 	clearScreen();
 
 	Gizmos::addSphere(m_gameObject.position, 1.0f, 32, 32, m_gameObject.colour);
+	for(auto& otherClient : m_otherClientGameObjects){
+		Gizmos::addSphere(otherClient.second.position, 1.0f, 32, 32, otherClient.second.colour);
+	}
 	// update perspective in case window resized
 	m_projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f,
 										  getWindowWidth() / (float)getWindowHeight(),
@@ -188,7 +191,7 @@ void Client::onRecievedClientDataPacket(RakNet::Packet* packet){
 	if(clientID != m_clientID){
 		GameObject clientData;
 		bsIn.Read((char*)&clientData, sizeof(GameObject));
-
+		m_otherClientGameObjects[clientID] = clientData;
 		//just outputting gameobj info to console, change later
 		std::cout << "Client " << clientID << " at: " << clientData.position.x << " " << clientData.position.z << std::endl;
 	}
