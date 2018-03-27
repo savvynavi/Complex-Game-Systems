@@ -8,4 +8,25 @@ public class RPGStats : MonoBehaviour {
 		Physical,
 		Elemental
 	}
+
+	public enum Stats {
+		Speed,
+		Str,
+		Def,
+		Int,
+		Mind,
+		Hp,
+		Mp,
+		Dex,
+		Agi
+	}
+
+	Dictionary<Stats, float> CharaStats;
+
+	public enum ItemTypes {
+		Head,
+		Torso,
+		Legs,
+		Hand
+	}
 }
