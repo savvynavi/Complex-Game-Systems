@@ -21,8 +21,6 @@ public class RPGStats : MonoBehaviour {
 		Agi
 	}
 
-	Dictionary<Stats, float> CharaStats;
-
 	public enum ItemTypes {
 		Head,
 		Torso,

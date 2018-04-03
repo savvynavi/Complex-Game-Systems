@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Ability", menuName = "RPG/Ability", order = 1)]
 public class Powers : ScriptableObject {
 	//add in animation/sounds for moves later when they can be tested
 
@@ -15,6 +16,7 @@ public class Powers : ScriptableObject {
 	public float damage;
 	public RPGStats.DmgType dmgType;
 	public Target target;
-	public string powName;
+	//public string powName;
 	public int duration;
+	public List<Status> currentEffects;
 }

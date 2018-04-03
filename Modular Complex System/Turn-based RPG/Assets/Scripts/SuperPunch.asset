@@ -9,11 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a9d6e4adf644304e9bfc4ce5666d486, type: 3}
-  m_Name: Punch
+  m_Name: SuperPunch
   m_EditorClassIdentifier: 
   manaCost: 0
   damage: 10
   dmgType: 0
   target: 0
   duration: 0
-  currentEffects: []
+  currentEffects:
+  - {fileID: 11400000, guid: cba1b809776871647b1a4acfc1f4fc5d, type: 2}
