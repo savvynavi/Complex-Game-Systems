@@ -24,7 +24,11 @@ public class Status : ScriptableObject {
 	}
 
 	//applies the effects once
-	public virtual void Apply(GameObject target) {
+	public virtual void Apply(Character target) {
+
+	}
+
+	public virtual void Remove(Character target) {
 
 	}
 }

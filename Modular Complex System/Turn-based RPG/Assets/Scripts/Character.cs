@@ -57,8 +57,6 @@ public class Character : MonoBehaviour {
 		set { CharaStats[RPGStats.Stats.Agi] = value; }
 	}
 	public List<Powers> abilities;
-	//public List<Powers> physAbilities;
-	//public List<Powers> magicAbilities;
 	public GameObject target;
 
 	Material material;
@@ -81,30 +79,52 @@ public class Character : MonoBehaviour {
 	void Update() {
 		//if alive
 		if(Hp > 0) {
-			//phys attack
-			if(abilities.Count > 0 && Input.GetKeyDown(KeyCode.C)) {
-				target.GetComponent<Character>().Hp -= abilities[0].damage;
+			//attack
+			if(abilities.Count > 0 && Input.GetKeyDown(KeyCode.Space)) {
+				target.GetComponent<Character>().Hp -= abilities[0].damage + Str;
+				//if there are buffs on the move, apply them
+				if(abilities[0].currentEffects.Count > 0) {
+					ApplyStatusEffects();
+				}
 			}
-			//magic attack
-			//if(magicAbilities.Count > 0 && Input.GetKeyDown(KeyCode.V) && Mp >= magicAbilities[0].manaCost) {
-			//	target.GetComponent<Character>().Hp -= magicAbilities[0].damage;
-			//	Mp -= magicAbilities[0].manaCost;
-			//}
-
 			if(target.GetComponent<Character>().Hp <= 0) {
 				target.GetComponent<Character>().Hp = 0;
 				target.GetComponent<Character>().material.color = Color.red;
 			}
 		}
+		updateStats();
+		//Timer();
+	}
+
+	void updateStats() {
+		speedStat = Speed;
+		strStat = Str;
+		defStat = Def;
+		intStat = Int;
+		mindStat = Mind;
+		hpStat = Hp;
+		mpStat = Mp;
+		dexStat = Dex;
+		agiStat = Agi;
 	}
 
 	void ApplyStatusEffects() {
-		//goes through buff list and applies them
-		foreach(Status buff in currentEffects) {
-			buff.Apply(GetComponent<GameObject>());
-			if(buff.Sta) {
-
-			}
+		//tmp solution
+		foreach(Status effect in abilities[0].currentEffects) {
+			Debug.Log("inside chara stat loop");
+			effect.Apply(this);
+			Destroy(effect, abilities[0].duration);
 		}
 	}
+	void Timer() {
+		//foreach(Status effect in abilities[0].currentEffects) {
+		//	if(abilities[0].duration >= 0) {
+		//		abilities[0].duration -= Time.deltaTime;
+		//	} else {
+		//		Debug.Log("Timer hitting zero");
+		//		Destroy(effect, abilities[0].duration);
+		//	}
+		//}
+	}
 }
+

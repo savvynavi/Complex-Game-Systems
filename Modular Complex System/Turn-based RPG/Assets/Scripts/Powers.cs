@@ -17,6 +17,6 @@ public class Powers : ScriptableObject {
 	public RPGStats.DmgType dmgType;
 	public Target target;
 	//public string powName;
-	public int duration;
+	public float duration;
 	public List<Status> currentEffects;
 }

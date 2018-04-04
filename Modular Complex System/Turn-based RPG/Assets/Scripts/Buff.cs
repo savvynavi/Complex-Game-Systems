@@ -6,13 +6,48 @@ using UnityEngine;
 public class Buff : Status {
 	public StatusEffect StatusEffects;
 
-	//Buff() {
-
-	//}
-
-	public override void Apply(GameObject target) {
-		if(target != null && target.GetComponent<Character>() != null) {
-			//target.GetComponent<Character>().currentEffects.Add(StatusEffects);
+	public override void Apply(Character target) {
+		if(target != null) {
+			Buff tmp = Instantiate(this);
+			//should be adding instance of buff to the charaEffects list
+			target.currentEffects.Add(tmp);
+			
+			//does effect here, fix later(not sustainable)
+			switch(tmp.StatusEffects.effect) {
+			case StatusEffectType.DmgBuff:
+				target.Str += tmp.StatusEffects.amount;
+				Debug.Log("strBuff active");
+				break;
+			case StatusEffectType.DmgDebuff:
+				target.Str -= tmp.StatusEffects.amount;
+				Debug.Log("strDebuff active");
+				break;
+			default:
+				Debug.Log("error");
+				break;
+			}
 		}
+	}
+
+	public override void Remove(Character target) {
+		Debug.Log("Removing component");
+
+
+		//	//reset stats
+		//	switch(tmp.StatusEffects.effect) {
+		//	case StatusEffectType.DmgBuff:
+		//		target.Str += tmp.StatusEffects.amount;
+		//		Debug.Log("strBuff active");
+		//		break;
+		//	case StatusEffectType.DmgDebuff:
+		//		target.Str -= tmp.StatusEffects.amount;
+		//		Debug.Log("strDebuff active");
+		//		break;
+		//	default:
+		//		Debug.Log("error");
+		//		break;
+		//	}
+		//	//delete this
+		//	
 	}
 }
