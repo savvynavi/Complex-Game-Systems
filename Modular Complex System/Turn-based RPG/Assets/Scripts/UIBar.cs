@@ -10,7 +10,7 @@ public class UIBar : MonoBehaviour {
 
 	private void Start() {
 		healthBar = GetComponent<Slider>();
-		healthBar.maxValue = destination.GetComponent<Character>().hpStat;
+		healthBar.maxValue = destination.GetComponent<RPGsys.Character>().hpStat;
 		healthBar.interactable = false;
 		//healthBar.fillRect;
 
@@ -21,6 +21,6 @@ public class UIBar : MonoBehaviour {
 	}
 
 	private void Update() {
-		healthBar.value = destination.GetComponent<Character>().Hp;
+		healthBar.value = destination.GetComponent<RPGsys.Character>().Hp;
 	}
 }

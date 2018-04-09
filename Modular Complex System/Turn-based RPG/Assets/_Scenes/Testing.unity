@@ -537,6 +537,7 @@ GameObject:
   - component: {fileID: 346051095}
   - component: {fileID: 346051094}
   - component: {fileID: 346051093}
+  - component: {fileID: 346051099}
   m_Layer: 0
   m_Name: Capsule (1)
   m_TagString: Untagged
@@ -649,6 +650,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &346051099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 346051092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84c3e9c05c6c6b443a8612139ecc4d4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particle: {fileID: 198129240231885858, guid: 0f92016894cc0064e9f72aa60a8fe364, type: 2}
+  duration: 0
 --- !u!1 &530759652
 GameObject:
   m_ObjectHideFlags: 0

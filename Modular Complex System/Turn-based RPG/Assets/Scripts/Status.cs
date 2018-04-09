@@ -2,33 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Status : ScriptableObject {
+namespace RPGsys{
+	public class Status : ScriptableObject{
 
-	public enum StatusEffectType{
-		DmgBuff,
-		DefBuff,
-		DmgDebuff,
-		Poison
-	}
+		ParticleSystem particles;
 
-	[System.Serializable]
-	public struct StatusEffect {
-		public StatusEffectType effect;
-		public RPGStats.Stats statBuff;
-		public float timer;
-		public float amount;
-	}
+		public Animation anim;
+		public enum StatusEffectType{
+			DmgBuff,
+			DefBuff,
+			DmgDebuff,
+			Poison
+		}
 
-	void Update() {
-		
-	}
+		[System.Serializable]
+		public struct StatusEffect{
+			public StatusEffectType effect;
+			public RPGStats.Stats statBuff;
+			public float timer;
+			public float amount;
+		}
 
-	//applies the effects once
-	public virtual void Apply(Character target) {
+		private void Awake(){
 
-	}
+		}
 
-	public virtual void Remove(Character target) {
+		void Update(){
 
+		}
+
+		//applies the effects once
+		public virtual void Apply(Character target){
+
+		}
+
+		public virtual void Remove(Character target){
+
+		}
 	}
 }
