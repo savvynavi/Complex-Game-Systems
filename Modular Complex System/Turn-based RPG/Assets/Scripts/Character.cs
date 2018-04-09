@@ -56,11 +56,12 @@ public class Character : MonoBehaviour {
 		get { return CharaStats[RPGStats.Stats.Agi]; }
 		set { CharaStats[RPGStats.Stats.Agi] = value; }
 	}
-	public List<Powers> abilities;
+	public Powers abilities;
 	public GameObject target;
 
 	Material material;
 	public List<Status> currentEffects;
+	List<Status> deadEffects;
 
 	void Start() {
 		material = GetComponent<Renderer>().material;
@@ -73,6 +74,9 @@ public class Character : MonoBehaviour {
 		Mp = mpStat;
 		Dex = dexStat;
 		Agi = agiStat;
+
+		//instantiating powers
+		abilities = Instantiate(abilities);
 	}
 
 	//testing physical power
@@ -80,10 +84,10 @@ public class Character : MonoBehaviour {
 		//if alive
 		if(Hp > 0) {
 			//attack
-			if(abilities.Count > 0 && Input.GetKeyDown(KeyCode.Space)) {
-				target.GetComponent<Character>().Hp -= abilities[0].damage + Str;
+			if(abilities != null && Input.GetKeyDown(KeyCode.Space)) {
+				target.GetComponent<Character>().Hp -= abilities.damage + Str;
 				//if there are buffs on the move, apply them
-				if(abilities[0].currentEffects.Count > 0) {
+				if(abilities.currentEffects.Count > 0) {
 					ApplyStatusEffects();
 				}
 			}
@@ -93,7 +97,7 @@ public class Character : MonoBehaviour {
 			}
 		}
 		updateStats();
-		//Timer();
+		Timer();
 	}
 
 	void updateStats() {
@@ -110,21 +114,23 @@ public class Character : MonoBehaviour {
 
 	void ApplyStatusEffects() {
 		//tmp solution
-		foreach(Status effect in abilities[0].currentEffects) {
+		foreach(Status effect in abilities.currentEffects) {
 			Debug.Log("inside chara stat loop");
 			effect.Apply(this);
-			Destroy(effect, abilities[0].duration);
+			//Destroy(effect, abilities.duration);
 		}
 	}
+
+	//if timer less than zero, remove from effect list
 	void Timer() {
-		//foreach(Status effect in abilities[0].currentEffects) {
-		//	if(abilities[0].duration >= 0) {
-		//		abilities[0].duration -= Time.deltaTime;
-		//	} else {
-		//		Debug.Log("Timer hitting zero");
-		//		Destroy(effect, abilities[0].duration);
-		//	}
-		//}
+		foreach(Status effect in abilities.currentEffects) {
+			if(abilities.duration >= 0) {
+				abilities.duration -= Time.deltaTime;
+			} else {
+				Debug.Log("Timer hitting zero");
+				currentEffects.Remove(currentEffects[0]);
+			}
+		}
 	}
 }
 
