@@ -32,22 +32,5 @@ public class Buff : Status {
 	public override void Remove(Character target) {
 		Debug.Log("Removing component");
 
-
-		//	//reset stats
-		//	switch(tmp.StatusEffects.effect) {
-		//	case StatusEffectType.DmgBuff:
-		//		target.Str += tmp.StatusEffects.amount;
-		//		Debug.Log("strBuff active");
-		//		break;
-		//	case StatusEffectType.DmgDebuff:
-		//		target.Str -= tmp.StatusEffects.amount;
-		//		Debug.Log("strDebuff active");
-		//		break;
-		//	default:
-		//		Debug.Log("error");
-		//		break;
-		//	}
-		//	//delete this
-		//	
 	}
 }
