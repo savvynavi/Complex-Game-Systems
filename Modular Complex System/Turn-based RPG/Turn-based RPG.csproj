@@ -299,7 +299,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Buff.cs" />
     <Compile Include="Assets\Scripts\Character.cs" />
-    <Compile Include="Assets\Scripts\CharaParticle.cs" />
     <Compile Include="Assets\Scripts\Powers.cs" />
     <Compile Include="Assets\Scripts\RPGStats.cs" />
     <Compile Include="Assets\Scripts\Status.cs" />

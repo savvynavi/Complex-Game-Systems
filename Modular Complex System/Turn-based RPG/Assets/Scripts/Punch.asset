@@ -14,6 +14,8 @@ MonoBehaviour:
   manaCost: 0
   damage: 10
   dmgType: 0
+  statType: 1
   target: 1
-  duration: 0
-  currentEffects: []
+  duration: 5
+  currentEffects:
+  - {fileID: 11400000, guid: 9deb901072f8318468105c1c40c203c3, type: 2}

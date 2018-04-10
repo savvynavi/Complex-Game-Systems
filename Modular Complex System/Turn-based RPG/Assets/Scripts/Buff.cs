@@ -11,7 +11,11 @@ namespace RPGsys
 		public override void Apply(Character target){
 			if(target != null){
 				Buff tmp = Instantiate(this);
-				//should be adding instance of buff to the charaEffects list
+
+				// make as copy of the particles
+				tmp.Clone(target);
+
+				//adding instance of buff to the charaEffects list
 				target.currentEffects.Add(tmp);
 
 				//does effect here, fix later(not sustainable)
@@ -32,6 +36,8 @@ namespace RPGsys
 		}
 
 		public override void Remove(Character target){
+			Destroy(partInst);
+
 			Debug.Log("Removing component");
 		}
 	}

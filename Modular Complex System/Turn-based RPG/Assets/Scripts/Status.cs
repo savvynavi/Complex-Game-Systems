@@ -5,9 +5,10 @@ using UnityEngine;
 namespace RPGsys{
 	public class Status : ScriptableObject{
 
-		ParticleSystem particles;
+		public ParticleSystem particles;
+		protected GameObject partInst;
 
-		public Animation anim;
+		//public Animation anim;
 		public enum StatusEffectType{
 			DmgBuff,
 			DefBuff,
@@ -38,6 +39,13 @@ namespace RPGsys{
 
 		public virtual void Remove(Character target){
 
+		}
+
+		public void Clone(Character target){
+			// make as copy of the particles
+			partInst = Instantiate(particles.gameObject);
+			partInst.transform.parent = target.transform;
+			partInst.transform.localPosition = Vector3.zero;
 		}
 	}
 }

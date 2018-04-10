@@ -62,7 +62,6 @@ namespace RPGsys{
 
 		Material material;
 		public List<Status> currentEffects;
-		List<Status> deadEffects;
 
 		void Start(){
 			material = GetComponent<Renderer>().material;
@@ -86,10 +85,10 @@ namespace RPGsys{
 			if(Hp > 0){
 				//attack
 				if(abilities != null && Input.GetKeyDown(KeyCode.Space)){
-					target.GetComponent<Character>().Hp -= abilities.damage + Str;
+					
 					//if there are buffs on the move, apply them
 					if(abilities.currentEffects.Count > 0){
-						ApplyStatusEffects();
+						abilities.Apply(this, target.GetComponent<Character>());
 					}
 				}
 				if(target.GetComponent<Character>().Hp <= 0){
@@ -98,7 +97,11 @@ namespace RPGsys{
 				}
 			}
 			UpdateStats();
-			Timer();
+
+			//will only hit the timer if there are any effects in play
+			if(currentEffects.Count() > 0) {
+				Timer();
+			}
 		}
 
 		void UpdateStats(){
@@ -114,22 +117,35 @@ namespace RPGsys{
 		}
 
 		void ApplyStatusEffects(){
-			//tmp solution
 			foreach(Status effect in abilities.currentEffects){
 				Debug.Log("inside chara stat loop");
 				effect.Apply(this);
-				//Destroy(effect, abilities.duration);
 			}
 		}
 
 		//if timer less than zero, remove from effect list
 		void Timer(){
-			foreach(Status effect in abilities.currentEffects){
-				if(abilities.duration >= 0){
+			List<Status> deadEffects = new List<Status>();
+			foreach(Status effect in currentEffects){
+
+				//test code
+				//if(effect.StatusEffect.timer > 0) {
+
+				//}
+
+				if(abilities.duration > 0){
 					abilities.duration -= Time.deltaTime;
 				} else{
-					Debug.Log("Timer hitting zero");
-					currentEffects.Remove(currentEffects[0]);
+					Debug.Log("Timer hitting zero, adding to death list");
+					deadEffects.Add(effect);
+				}
+			}
+
+			//if there are things in dead list, loop over death list, remove from current effects
+			if(deadEffects.Count() > 0) {
+				foreach(Status deadEffect in deadEffects) {
+					deadEffect.Remove(target.GetComponent<Character>());
+					currentEffects.Remove(deadEffect);
 				}
 			}
 		}
