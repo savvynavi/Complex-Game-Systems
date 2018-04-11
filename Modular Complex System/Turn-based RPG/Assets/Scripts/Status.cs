@@ -7,6 +7,7 @@ namespace RPGsys{
 
 		public ParticleSystem particles;
 		protected GameObject partInst;
+		bool particleRunning;
 
 		//public Animation anim;
 		public enum StatusEffectType{
@@ -20,25 +21,30 @@ namespace RPGsys{
 		public struct StatusEffect{
 			public StatusEffectType effect;
 			public RPGStats.Stats statBuff;
-			public float timer;
 			public float amount;
 		}
+		public float timer;
+
+		public StatusEffect statusEffect;
 
 		private void Awake(){
 
 		}
 
-		void Update(){
-
+		virtual public void UpdateEffect(Character chara){
+			timer -= Time.deltaTime;
+			if(timer < particles.main.startLifetime.constant) {
+				partInst.GetComponent<ParticleSystem>().Stop();
+			}
 		}
 
 		//applies the effects once
-		public virtual void Apply(Character target){
+		public virtual void Apply(Character target, float duration){
 
 		}
 
 		public virtual void Remove(Character target){
-
+			Destroy(partInst);
 		}
 
 		public void Clone(Character target){

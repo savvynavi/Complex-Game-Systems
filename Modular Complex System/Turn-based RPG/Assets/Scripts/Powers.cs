@@ -65,11 +65,12 @@ namespace RPGsys
 
 			//decrease target hp by damage amount + the chatacters given stat
 			target.Hp -= (damage + attMod);
-			Debug.Log(attMod);
-			Debug.Log(obj.Str);
+			//Debug.Log(attMod);
+			//Debug.Log(obj.Str);
+
 			//loops over current effects on this power, applies them to the target
 			for(int i = 0; i < currentEffects.Count; i++) {
-				currentEffects[i].Apply(target);
+				currentEffects[i].Apply(target, duration);
 			}
 		}
 	}

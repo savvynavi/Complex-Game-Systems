@@ -8,37 +8,56 @@ namespace RPGsys
 	public class Buff : Status{
 		public StatusEffect StatusEffects;
 
-		public override void Apply(Character target){
+		public override void Apply(Character target, float duration){
 			if(target != null){
 				Buff tmp = Instantiate(this);
-
 				// make as copy of the particles
 				tmp.Clone(target);
-
+				tmp.timer = duration;
 				//adding instance of buff to the charaEffects list
 				target.currentEffects.Add(tmp);
-
-				//does effect here, fix later(not sustainable)
-				switch(tmp.StatusEffects.effect){
-				case StatusEffectType.DmgBuff:
-					target.Str += tmp.StatusEffects.amount;
-					Debug.Log("strBuff active");
-					break;
-				case StatusEffectType.DmgDebuff:
-					target.Str -= tmp.StatusEffects.amount;
-					Debug.Log("strDebuff active");
-					break;
-				default:
-					Debug.Log("error");
-					break;
-				}
+				SetStats(target);
 			}
 		}
 
 		public override void Remove(Character target){
-			Destroy(partInst);
-
+			ResetStats(target);
+			base.Remove(target);
 			Debug.Log("Removing component");
+		}
+
+		void SetStats(Character target){
+			//does effect here, fix later(not sustainable)
+			switch(StatusEffects.effect) {
+			case StatusEffectType.DmgBuff:
+				target.Str += StatusEffects.amount;
+				Debug.Log("strBuff active");
+				break;
+			case StatusEffectType.DmgDebuff:
+				target.Str -= StatusEffects.amount;
+				Debug.Log("strDebuff active");
+				break;
+			default:
+				Debug.Log("error");
+				break;
+			}
+		}
+
+		void ResetStats(Character target) {
+			//does effect here, fix later(not sustainable)
+			switch(StatusEffects.effect) {
+			case StatusEffectType.DmgBuff:
+				target.Str -= StatusEffects.amount;
+				Debug.Log("strBuff deactive");
+				break;
+			case StatusEffectType.DmgDebuff:
+				target.Str += StatusEffects.amount;
+				Debug.Log("strDebuff deactive");
+				break;
+			default:
+				Debug.Log("error");
+				break;
+			}
 		}
 	}
 }

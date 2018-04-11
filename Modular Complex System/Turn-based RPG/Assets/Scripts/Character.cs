@@ -57,7 +57,7 @@ namespace RPGsys{
 			get { return CharaStats[RPGStats.Stats.Agi]; }
 			set { CharaStats[RPGStats.Stats.Agi] = value; }
 		}
-		public Powers abilities;
+		public List<Powers> abilities;
 		public GameObject target;
 
 		Material material;
@@ -76,20 +76,25 @@ namespace RPGsys{
 			Agi = agiStat;
 
 			//instantiating powers
-			abilities = Instantiate(abilities);
+			for(int i = 0; i < abilities.Count(); i++) {
+				abilities[i] = Instantiate(abilities[i]);
+			}
 		}
 
-		//testing physical power
 		void Update(){
 			//if alive
 			if(Hp > 0){
 				//attack
 				if(abilities != null && Input.GetKeyDown(KeyCode.Space)){
-					
+
 					//if there are buffs on the move, apply them
-					if(abilities.currentEffects.Count > 0){
-						abilities.Apply(this, target.GetComponent<Character>());
+					//set up w diff button presses next, then hook to buttons
+					foreach(Powers ability in abilities) {
+						ability.Apply(this, target.GetComponent<Character>());
 					}
+					//if(abilities[0].currentEffects.Count > 0){
+					//	abilities[0].Apply(this, target.GetComponent<Character>());
+					//}
 				}
 				if(target.GetComponent<Character>().Hp <= 0){
 					target.GetComponent<Character>().Hp = 0;
@@ -97,7 +102,6 @@ namespace RPGsys{
 				}
 			}
 			UpdateStats();
-
 			//will only hit the timer if there are any effects in play
 			if(currentEffects.Count() > 0) {
 				Timer();
@@ -116,35 +120,22 @@ namespace RPGsys{
 			agiStat = Agi;
 		}
 
-		void ApplyStatusEffects(){
-			foreach(Status effect in abilities.currentEffects){
-				Debug.Log("inside chara stat loop");
-				effect.Apply(this);
-			}
-		}
-
 		//if timer less than zero, remove from effect list
 		void Timer(){
 			List<Status> deadEffects = new List<Status>();
 			foreach(Status effect in currentEffects){
-
-				//test code
-				//if(effect.StatusEffect.timer > 0) {
-
-				//}
-
-				if(abilities.duration > 0){
-					abilities.duration -= Time.deltaTime;
-				} else{
-					Debug.Log("Timer hitting zero, adding to death list");
+				//if the timer is less than zero, add to dead list, else count down
+				effect.UpdateEffect(this);
+				if(effect.timer < 0) {
 					deadEffects.Add(effect);
 				}
+
 			}
 
 			//if there are things in dead list, loop over death list, remove from current effects
 			if(deadEffects.Count() > 0) {
 				foreach(Status deadEffect in deadEffects) {
-					deadEffect.Remove(target.GetComponent<Character>());
+					deadEffect.Remove(this);
 					currentEffects.Remove(deadEffect);
 				}
 			}
