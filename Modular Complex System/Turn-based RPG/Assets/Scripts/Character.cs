@@ -6,6 +6,8 @@ using System.Linq;
 namespace RPGsys{
 	public class Character : MonoBehaviour{
 		//add in animations/sounds later
+		protected ButtonBehaviour button = null;
+			
 		//base stats
 		public float speedStat;
 		public float strStat;
@@ -16,6 +18,8 @@ namespace RPGsys{
 		public float mpStat;
 		public float dexStat;
 		public float agiStat;
+
+		public ClassInfo classInfo;
 
 		//dictionary stuff
 		public Dictionary<RPGStats.Stats, float> CharaStats = new Dictionary<RPGStats.Stats, float>();
@@ -57,7 +61,6 @@ namespace RPGsys{
 			get { return CharaStats[RPGStats.Stats.Agi]; }
 			set { CharaStats[RPGStats.Stats.Agi] = value; }
 		}
-		public List<Powers> abilities;
 		public GameObject target;
 
 		Material material;
@@ -75,36 +78,40 @@ namespace RPGsys{
 			Dex = dexStat;
 			Agi = agiStat;
 
-			//instantiating powers
-			for(int i = 0; i < abilities.Count(); i++) {
-				abilities[i] = Instantiate(abilities[i]);
+			button = GetComponent<ButtonBehaviour>();
+
+			classInfo = Instantiate(classInfo);
+			for(int i = 0; i < classInfo.classPowers.Count(); i++) {
+				classInfo.classPowers[i] = Instantiate(classInfo.classPowers[i]);
 			}
 		}
 
 		void Update(){
 			//if alive
-			if(Hp > 0){
-				//attack
-				if(abilities != null && Input.GetKeyDown(KeyCode.Space)){
 
-					//if there are buffs on the move, apply them
-					//set up w diff button presses next, then hook to buttons
-					foreach(Powers ability in abilities) {
-						ability.Apply(this, target.GetComponent<Character>());
-					}
-					//if(abilities[0].currentEffects.Count > 0){
-					//	abilities[0].Apply(this, target.GetComponent<Character>());
-					//}
-				}
-				if(target.GetComponent<Character>().Hp <= 0){
-					target.GetComponent<Character>().Hp = 0;
-					target.GetComponent<Character>().material.color = Color.red;
-				}
-			}
 			UpdateStats();
 			//will only hit the timer if there are any effects in play
 			if(currentEffects.Count() > 0) {
 				Timer();
+			}
+		}
+
+		public void Attack() {
+			if(Hp > 0) {
+				foreach(Powers pow in classInfo.classPowers) {
+					pow.Apply(this, target.GetComponent<Character>());
+				}
+				//seperating button attacks out
+				for(int i = 0; i < classInfo.classPowers.Count(); i++) {
+					if(classInfo.classPowers[i].powName == ) {
+
+					}
+				}
+
+				if(target.GetComponent<Character>().Hp <= 0) {
+					target.GetComponent<Character>().Hp = 0;
+					target.GetComponent<Character>().material.color = Color.red;
+				}
 			}
 		}
 

@@ -21,7 +21,7 @@ namespace RPGsys
 		public RPGStats.DmgType dmgType;
 		public RPGStats.Stats statType;
 		public Target target;
-		//public string powName;
+		public string powName;
 		public float duration;
 		public List<Status> currentEffects;
 
