@@ -39,7 +39,6 @@ namespace RPGsys {
 			foreach(Powers pow in powerList) {
 				Debug.Log("Punch Button Works!");
 
-				
 				GetComponent<Character>().Attack();
 			}
 		}
