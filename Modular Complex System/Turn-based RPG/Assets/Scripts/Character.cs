@@ -7,7 +7,6 @@ using UnityEngine.UI;
 namespace RPGsys{
 	public class Character : MonoBehaviour{
 		//add in animations/sounds later
-		ButtonBehaviour button = null;
 			
 		//base stats
 		public float speedStat;
@@ -79,7 +78,6 @@ namespace RPGsys{
 			Dex = dexStat;
 			Agi = agiStat;
 
-			button = GetComponent<ButtonBehaviour>();
 
 			classInfo = Instantiate(classInfo);
 			for(int i = 0; i < classInfo.classPowers.Count(); i++) {
@@ -95,23 +93,15 @@ namespace RPGsys{
 			if(currentEffects.Count() > 0) {
 				Timer();
 			}
+
+			//test code for applying abilities
+			//if(Input.GetKey(KeyCode.Space)) {
+			//	FindObjectOfType<TurnBehaviour>().TurnApplyAttack();
+			//}
 		}
 
 		public void Attack() {
 			if(Hp > 0) {
-				//foreach(Powers pow in classInfo.classPowers) {
-				//	pow.Apply(this, target.GetComponent<Character>());
-				//}
-				//seperating button attacks out
-				if(button != null) {
-					string tmp = button.GetComponent<Text>().text;
-					for(int i = 0; i < classInfo.classPowers.Count(); i++) {
-						if(button.GetComponent<Text>().text == classInfo.classPowers[i].powName) {
-							classInfo.classPowers[i].Apply(this, target.GetComponent<Character>());
-						}
-					}
-				}
-
 				if(target.GetComponent<Character>().Hp <= 0) {
 					target.GetComponent<Character>().Hp = 0;
 					target.GetComponent<Character>().material.color = Color.red;
