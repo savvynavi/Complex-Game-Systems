@@ -16,7 +16,7 @@ namespace RPGsys {
 		private void Awake() {
 			powerList = GetComponent<Character>().classInfo.classPowers;
 			buttons = new List<Button>();
-			Setup();
+			//Setup();
 
 		}
 
@@ -43,13 +43,13 @@ namespace RPGsys {
 
 		public void ShowButtons() {
 			foreach(Button btn in buttons) {
-				btn.enabled = true;
+				btn.gameObject.SetActive(true);
 			}
 		}
 
 		public void HideButtons() {
 			foreach(Button btn in buttons) {
-				btn.enabled = false;
+				btn.gameObject.SetActive(false);
 			}
 		}
 

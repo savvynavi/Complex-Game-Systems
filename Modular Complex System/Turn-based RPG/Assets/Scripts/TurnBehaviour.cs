@@ -22,7 +22,6 @@ namespace RPGsys {
 			//find better solution won't work w/ mult button
 			button = FindObjectOfType<ButtonBehaviour>().GetComponent<ButtonBehaviour>();
 			numOfTurns = AvailablePlayers.Count;
-			
 		}
 
 		//creates temp struct to hold passed in values then adds this to the list of moves
@@ -36,16 +35,20 @@ namespace RPGsys {
 			}
 		}
 
-		//goes through power list, applies to target
-		public void TurnApplyAttack() {
-			foreach(TurnInfo info in MovesThisRound) {
-				info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
-			}
 
-			//clears the list after each round
-			MovesThisRound.Clear();
-			numOfTurns = AvailablePlayers.Count;
-		}
+		////MOVED TO STATEMANAGER DUE TO HOW COROUTINES WORK, LOOK THERE FOR THIS INFO////
+		//goes through power list, applies to target
+		//public IEnumerator TurnApplyAttack() {
+		//	foreach(TurnInfo info in MovesThisRound) {
+		//		info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
+		//		yield return new WaitForSeconds(2);
+
+		//	}
+
+		//	//clears the list after each round
+		//	MovesThisRound.Clear();
+		//	numOfTurns = AvailablePlayers.Count;
+		//}
 	}
 }
 

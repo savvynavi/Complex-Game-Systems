@@ -13,8 +13,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particles: {fileID: 198858270796054628, guid: 808a719498703654ba814019c92de944,
     type: 2}
+  timer: 0
+  statusEffect:
+    effect: 0
+    statBuff: 0
+    amount: 0
   StatusEffects:
     effect: 2
     statBuff: 1
-    timer: 5
     amount: 50
