@@ -63,11 +63,11 @@ namespace RPGsys{
 		}
 		public GameObject target;
 
-		Material material;
+		//Material material;
 		public List<Status> currentEffects;
 
 		void Start(){
-			material = GetComponent<Renderer>().material;
+			//material = GetComponent<Renderer>().material;
 			Speed = speedStat;
 			Str = strStat;
 			Def = defStat;
@@ -104,7 +104,7 @@ namespace RPGsys{
 			if(Hp > 0) {
 				if(target.GetComponent<Character>().Hp <= 0) {
 					target.GetComponent<Character>().Hp = 0;
-					target.GetComponent<Character>().material.color = Color.red;
+					//target.GetComponent<Character>().material.color = Color.red;
 				}
 			}
 		}

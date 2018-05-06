@@ -25,6 +25,8 @@ namespace RPGsys
 		public float duration;
 		public List<Status> currentEffects;
 
+		public Animation anim;
+
 		public void Apply(Character obj ,Character target){
 
 			float attMod;
@@ -72,6 +74,8 @@ namespace RPGsys
 			for(int i = 0; i < currentEffects.Count; i++) {
 				currentEffects[i].Apply(target, duration);
 			}
+
+			anim.Play();
 		}
 	}
 }
