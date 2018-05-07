@@ -7,7 +7,8 @@ using UnityEngine.UI;
 namespace RPGsys{
 	public class Character : MonoBehaviour{
 		//add in animations/sounds later
-			
+		//Animator animController;
+
 		//base stats
 		public float speedStat;
 		public float strStat;
@@ -20,6 +21,7 @@ namespace RPGsys{
 		public float agiStat;
 
 		public ClassInfo classInfo;
+		public Animator anim;
 
 		//dictionary stuff
 		public Dictionary<RPGStats.Stats, float> CharaStats = new Dictionary<RPGStats.Stats, float>();
@@ -83,6 +85,9 @@ namespace RPGsys{
 			for(int i = 0; i < classInfo.classPowers.Count(); i++) {
 				classInfo.classPowers[i] = Instantiate(classInfo.classPowers[i]);
 			}
+
+			anim = GetComponent<Animator>();
+			//animController.Play("Idle");
 		}
 
 		void Update(){

@@ -16,16 +16,24 @@ namespace RPGsys
 			Single
 		}
 
+		public enum AbilityAnim {
+			RIGHT_PUNCH,
+			KICK,
+			ORC_AXE,
+			DEATH
+		};
+
 		public float manaCost;
 		public float damage;
 		public RPGStats.DmgType dmgType;
 		public RPGStats.Stats statType;
 		public Target target;
+		public AbilityAnim anim; 
 		public string powName;
 		public float duration;
 		public List<Status> currentEffects;
 
-		public Animation anim;
+		///public AnimationClip anim;
 
 		public void Apply(Character obj ,Character target){
 
@@ -67,6 +75,7 @@ namespace RPGsys
 
 			//decrease target hp by damage amount + the chatacters given stat
 			target.Hp -= (damage + attMod);
+			//setAnimName(obj.transform);
 			//Debug.Log(attMod);
 			//Debug.Log(obj.Str);
 
@@ -74,8 +83,10 @@ namespace RPGsys
 			for(int i = 0; i < currentEffects.Count; i++) {
 				currentEffects[i].Apply(target, duration);
 			}
+		}
 
-			anim.Play();
+		void setAnimName(Transform obj) {
+			obj.GetComponent<Animator>().name = anim.ToString();
 		}
 	}
 }

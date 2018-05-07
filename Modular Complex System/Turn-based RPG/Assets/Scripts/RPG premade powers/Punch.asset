@@ -16,6 +16,7 @@ MonoBehaviour:
   dmgType: 0
   statType: 1
   target: 1
+  anim: 0
   powName: Punch!
   duration: 5
   currentEffects:

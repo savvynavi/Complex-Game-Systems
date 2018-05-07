@@ -8,6 +8,7 @@ namespace RPGsys {
 	public class ButtonBehaviour : MonoBehaviour {
 
 		List<Powers> powerList;
+		public bool playerActivated;
 
 		public List<Button> buttons;
 		public Button button;
@@ -16,12 +17,11 @@ namespace RPGsys {
 		private void Awake() {
 			powerList = GetComponent<Character>().classInfo.classPowers;
 			buttons = new List<Button>();
-			//Setup();
-
 		}
 
 		public void Setup() {
 			int count = 0;
+			playerActivated = false;
 			foreach(Powers pow in powerList) {
 				GameObject go = Instantiate(button.gameObject);
 				button = go.GetComponent<Button>();
@@ -34,7 +34,7 @@ namespace RPGsys {
 				count++;
 			}
 
-			//adding listeners to each button
+			//adding listeners to each button/settting active state to false
 			for(int i = 0; i < buttons.Count; i++) {
 				int capturedIndex = i;
 				buttons[i].onClick.AddListener(() => HandleClick(capturedIndex));
@@ -43,6 +43,7 @@ namespace RPGsys {
 
 		public void ShowButtons() {
 			foreach(Button btn in buttons) {
+				playerActivated = false;
 				btn.gameObject.SetActive(true);
 			}
 		}
@@ -60,6 +61,7 @@ namespace RPGsys {
 				if(buttons[capturedIndex].GetComponentInChildren<Text>().text == powerList[i].powName) {
 					Debug.Log("Adding in " + powerList[i].powName + " to list");
 					FindObjectOfType<TurnBehaviour>().TurnAddAttack(powerList[i], transform.GetComponent<Character>());
+					playerActivated = true;
 				}
 			}
 		}

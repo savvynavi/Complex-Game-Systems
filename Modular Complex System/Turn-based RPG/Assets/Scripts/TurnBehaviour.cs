@@ -8,8 +8,10 @@ namespace RPGsys {
 
 		public List<Powers> abilitiesThisRound;
 		public List<Transform> AvailablePlayers;
+		public List<Transform> AvailableEnemies;
 		public List<TurnInfo> MovesThisRound;
 		public int numOfTurns;
+		public int numOfEnemyTurns;
 
 		[System.Serializable]
 		public struct TurnInfo{
@@ -22,6 +24,7 @@ namespace RPGsys {
 			//find better solution won't work w/ mult button
 			button = FindObjectOfType<ButtonBehaviour>().GetComponent<ButtonBehaviour>();
 			numOfTurns = AvailablePlayers.Count;
+			numOfEnemyTurns = AvailableEnemies.Count;
 		}
 
 		//creates temp struct to hold passed in values then adds this to the list of moves
@@ -35,20 +38,16 @@ namespace RPGsys {
 			}
 		}
 
-
-		////MOVED TO STATEMANAGER DUE TO HOW COROUTINES WORK, LOOK THERE FOR THIS INFO////
-		//goes through power list, applies to target
-		//public IEnumerator TurnApplyAttack() {
-		//	foreach(TurnInfo info in MovesThisRound) {
-		//		info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
-		//		yield return new WaitForSeconds(2);
-
-		//	}
-
-		//	//clears the list after each round
-		//	MovesThisRound.Clear();
-		//	numOfTurns = AvailablePlayers.Count;
-		//}
+		//seperates out enemy movement turns from player
+		public void turnAddAttackEnemy(Powers pow, Character chara) {
+			if(numOfEnemyTurns > 0) {
+				TurnInfo tmp;
+				tmp.ability = pow;
+				tmp.player = chara;
+				numOfEnemyTurns--;
+				MovesThisRound.Add(tmp);
+			}
+		}
 	}
 }
 
