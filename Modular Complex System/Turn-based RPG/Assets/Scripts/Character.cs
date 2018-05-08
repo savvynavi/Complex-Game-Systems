@@ -87,31 +87,10 @@ namespace RPGsys{
 			}
 
 			anim = GetComponent<Animator>();
-			//animController.Play("Idle");
 		}
 
 		void Update(){
-			//if alive
-
 			UpdateStats();
-			//will only hit the timer if there are any effects in play
-			if(currentEffects.Count() > 0) {
-				Timer();
-			}
-
-			//test code for applying abilities
-			//if(Input.GetKey(KeyCode.Space)) {
-			//	FindObjectOfType<TurnBehaviour>().TurnApplyAttack();
-			//}
-		}
-
-		public void Attack() {
-			if(Hp > 0) {
-				if(target.GetComponent<Character>().Hp <= 0) {
-					target.GetComponent<Character>().Hp = 0;
-					//target.GetComponent<Character>().material.color = Color.red;
-				}
-			}
 		}
 
 		void UpdateStats(){
@@ -127,7 +106,7 @@ namespace RPGsys{
 		}
 
 		//if timer less than zero, remove from effect list
-		void Timer(){
+		public void Timer(){
 			List<Status> deadEffects = new List<Status>();
 			foreach(Status effect in currentEffects){
 				//if the timer is less than zero, add to dead list, else count down

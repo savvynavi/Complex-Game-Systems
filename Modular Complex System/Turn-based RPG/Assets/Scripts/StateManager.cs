@@ -14,9 +14,12 @@ namespace RPGsys {
 		int rand;
 
 		public List<Transform> players;
+		public List<Transform> publicEnemies;
 		public float startDelay;
 		public float endDelay;
-		//public int numOfTurns;
+
+		//////CHANGE ALL LISTS TO USE THE TURNbEHAV ONES FOR CLARITY
+
 
 		// Use this for initialization
 		void Start() {
@@ -24,18 +27,21 @@ namespace RPGsys {
 			turnBehaviour = GetComponent<TurnBehaviour>();
 			endWait = new WaitForSeconds(endDelay);
 			characters = new List<Character>();
+			enemies = new List<Character>();
 			enemyBehav = FindObjectOfType<EnemyBehaviour>();
 
+			//filling private lists
 			for(int i = 0; i < players.Count; i++) {
 				characters.Add(players[i].GetComponent<Character>());
 			}
 
-			//mmove out of start
+			for(int i = 0; i < publicEnemies.Count; i++) {
+				enemies.Add(publicEnemies[i].GetComponent<Character>());
+			}
 
 			foreach(Character chara in characters) {
 				chara.GetComponent<ButtonBehaviour>().Setup();
 			}
-
 
 			//starting game loops
 			StartCoroutine(GameLoop());
@@ -58,30 +64,38 @@ namespace RPGsys {
 		//make it pause for user input/menu stuff
 		private IEnumerator PlayerTurn() {
 			Debug.Log("Player Turn State");
+
+			yield return new WaitForEndOfFrame();
+
+			List<Character> deadCharacters = new List<Character>();
+			//if dead, remove from list
+			foreach(Character chara in characters) {
+				Debug.Log(chara.name);
+				if(chara.Hp <= 0) {
+					Debug.Log(chara.name + " is dead");
+					chara.Hp = 0;
+					deadCharacters.Add(chara);
+				}
+			}
+			if(deadCharacters.Count > 0) {
+				foreach(Character dead in deadCharacters) {
+					characters.Remove(dead);
+				}
+			}
+
+			Debug.Log(characters[0].Hp);
+
 			int tmp = 0;
 			foreach(Character chara in characters) {
 				tmp += turnBehaviour.numOfTurns;
 			}
 
-
-			//if(tmp > 0) {
-			//	//StartCoroutine(PlayerTurn()); crashes unity every time don't use
-
-			//}
-
 			//loop through characters and wait until input to move to next one
 			foreach(Character chara in characters) {
 				chara.GetComponent<ButtonBehaviour>().ShowButtons();
-				StartCoroutine(LoopCharacterButtons(chara));
-				//chara.GetComponent<ButtonBehaviour>().HideButtons();
-			}
-
-			yield return endWait;
-		}
-
-		private IEnumerator LoopCharacterButtons(Character chara) {
-			while(chara.GetComponent<ButtonBehaviour>().playerActivated != true) {
-				yield return null;
+				while(chara.GetComponent<ButtonBehaviour>().playerActivated == false) {
+					yield return null;
+				}
 			}
 		}
 
@@ -93,8 +107,13 @@ namespace RPGsys {
 			}
 
 			//enemy move selection
-			int rand = Random.Range(0, characters.Count);
-			enemyBehav.AddEnemyAttackRand(characters[rand]);
+			foreach(Character enemy in enemies) {
+				int rand = Random.Range(0, characters.Count);
+				enemy.target = characters[rand].gameObject;
+				enemyBehav.AddEnemyAttackRand(characters[rand]);
+			}
+
+
 
 			yield return new WaitForSeconds(0.5f);
 
@@ -105,11 +124,19 @@ namespace RPGsys {
 			Debug.Log("Applying Moves");
 
 			foreach(TurnBehaviour.TurnInfo info in turnBehaviour.MovesThisRound) {
+				info.player.Timer();
 				info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
 				string name = info.ability.anim.ToString();
 				info.player.GetComponent<Animator>().Play(name);
 				yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(1).length + 1.5f);
+			}
 
+			//move back to see if fixes wrong dead person
+			foreach(TurnBehaviour.TurnInfo info in turnBehaviour.MovesThisRound) {
+				if(info.player.Hp <= 0) {
+					characters[rand].Hp = 0;
+					characters[rand].GetComponent<Animator>().Play("DEAD");
+				}
 			}
 
 			turnBehaviour.MovesThisRound.Clear();

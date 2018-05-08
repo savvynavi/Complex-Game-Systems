@@ -17,6 +17,12 @@ namespace RPGsys{
 			Poison
 		}
 
+		public enum StatusEffectTarget {
+			Self,
+			Target,
+			Group
+		}
+
 		[System.Serializable]
 		public struct StatusEffect{
 			public StatusEffectType effect;
@@ -27,19 +33,15 @@ namespace RPGsys{
 
 		public StatusEffect statusEffect;
 
-		private void Awake(){
-
-		}
-
+		//reduces time by 1 turn each time it's called
 		virtual public void UpdateEffect(Character chara){
-			timer -= Time.deltaTime;
+			timer--;
 			if(timer < particles.main.startLifetime.constant) {
 				partInst.GetComponent<ParticleSystem>().Stop();
 			}
 		}
 
-		//applies the effects once
-		public virtual void Apply(Character target, float duration){
+		public virtual void Apply(Character target, float duration) {
 
 		}
 

@@ -16,6 +16,7 @@ MonoBehaviour:
   dmgType: 0
   statType: 7
   target: 1
+  anim: 1
   powName: Kick!
   duration: 0
   currentEffects: []
