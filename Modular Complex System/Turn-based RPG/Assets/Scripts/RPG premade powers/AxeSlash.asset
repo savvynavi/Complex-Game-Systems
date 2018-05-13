@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Name: AxeSlash
   m_EditorClassIdentifier: 
   manaCost: 0
-  damage: 1000
+  damage: 10
   dmgType: 0
   statType: 1
   target: 1
-  anim: 2
+  anim: 3
   powName: Axe Slash
   duration: 0
   currentEffects: []

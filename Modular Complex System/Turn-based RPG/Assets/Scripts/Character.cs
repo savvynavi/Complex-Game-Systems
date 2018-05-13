@@ -68,7 +68,7 @@ namespace RPGsys{
 		//Material material;
 		public List<Status> currentEffects;
 
-		void Start(){
+		void Awake(){
 			//material = GetComponent<Renderer>().material;
 			Speed = speedStat;
 			Str = strStat;
@@ -90,7 +90,7 @@ namespace RPGsys{
 		}
 
 		void Update(){
-			UpdateStats();
+			//UpdateStats();
 		}
 
 		void UpdateStats(){

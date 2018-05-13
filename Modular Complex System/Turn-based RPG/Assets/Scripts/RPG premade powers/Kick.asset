@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Name: Kick
   m_EditorClassIdentifier: 
   manaCost: 0
-  damage: 20
+  damage: 5
   dmgType: 0
-  statType: 7
+  statType: 1
   target: 1
   anim: 1
   powName: Kick!

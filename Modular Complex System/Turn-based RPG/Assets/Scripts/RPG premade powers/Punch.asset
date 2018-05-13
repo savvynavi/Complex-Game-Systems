@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Punch
   m_EditorClassIdentifier: 
   manaCost: 0
-  damage: 10
+  damage: 10000
   dmgType: 0
   statType: 1
   target: 1

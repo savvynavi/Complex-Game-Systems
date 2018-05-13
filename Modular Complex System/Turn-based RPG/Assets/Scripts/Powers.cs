@@ -10,8 +10,7 @@ namespace RPGsys
 		//add in animation/sounds for moves later when they can be tested
 
 		//abilities can either target a group 1 person, no limits on friendly fire
-		public enum Target
-		{
+		public enum Target{
 			Group,
 			Single
 		}
@@ -19,6 +18,7 @@ namespace RPGsys
 		public enum AbilityAnim {
 			RIGHT_PUNCH,
 			KICK,
+			SPELL,
 			ORC_AXE,
 			DEATH
 		};

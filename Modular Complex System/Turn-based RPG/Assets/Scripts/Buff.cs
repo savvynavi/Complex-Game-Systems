@@ -23,7 +23,6 @@ namespace RPGsys
 		public override void Remove(Character target){
 			ResetStats(target);
 			base.Remove(target);
-			Debug.Log("Removing component");
 		}
 
 		void SetStats(Character target){
@@ -31,11 +30,9 @@ namespace RPGsys
 			switch(StatusEffects.effect) {
 			case StatusEffectType.DmgBuff:
 				target.Str += StatusEffects.amount;
-				Debug.Log("strBuff active");
 				break;
 			case StatusEffectType.DmgDebuff:
 				target.Str -= StatusEffects.amount;
-				Debug.Log("strDebuff active");
 				break;
 			default:
 				Debug.Log("error");
@@ -48,11 +45,9 @@ namespace RPGsys
 			switch(StatusEffects.effect) {
 			case StatusEffectType.DmgBuff:
 				target.Str -= StatusEffects.amount;
-				Debug.Log("strBuff deactive");
 				break;
 			case StatusEffectType.DmgDebuff:
 				target.Str += StatusEffects.amount;
-				Debug.Log("strDebuff deactive");
 				break;
 			default:
 				Debug.Log("error");
