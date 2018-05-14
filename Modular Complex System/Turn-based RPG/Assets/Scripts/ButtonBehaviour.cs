@@ -12,11 +12,13 @@ namespace RPGsys {
 		float CharacterMaxHP;
 		float CharacterCurrentMP;
 		float CharacterMaxMP;
+		Text HoverText;
 
 		List<Powers> powerList;
 		string charaName;
 
 		//EventTrigger eventTrigger = null;
+		public Dictionary<string, Text> hoverDictionary = new Dictionary<string, Text>();
 
 		public bool playerActivated;
 		public List<Button> buttons;
@@ -39,6 +41,7 @@ namespace RPGsys {
 		public Text mpTxt;
 		public Transform hpTextPos;
 		public Transform mpTextPos;
+		public Transform hoverTxtPos;
 
 
 
@@ -132,6 +135,9 @@ namespace RPGsys {
 				button.name = pow.powName + "(" + (count + 1) + ")";
 				button.GetComponentInChildren<Text>().text = pow.powName;
 				buttons.Add(button);
+
+				//setup for hover textbox, set to inactive 
+				HoverButtonSetup(pow, button);
 				count++;
 			}
 
@@ -148,19 +154,32 @@ namespace RPGsys {
 
 				EventTrigger.Entry pointerEnter = new EventTrigger.Entry();
 				pointerEnter.eventID = EventTriggerType.PointerEnter;
-				pointerEnter.callback.AddListener((data) => { OnPointerEnter(); });
+				pointerEnter.callback.AddListener((data) => { OnPointerEnter(data); });
 				trigger.triggers.Add(pointerEnter);
 
 				EventTrigger.Entry pointerExit = new EventTrigger.Entry();
 				pointerExit.eventID = EventTriggerType.PointerExit;
-				pointerExit.callback.AddListener((data) => { OnPointerExit(); });
+				pointerExit.callback.AddListener((data) => { OnPointerExit(data); });
 				trigger.triggers.Add(pointerExit);
 
 				buttons[i].transform.position = btnPositions[i].transform.position;
 			}
-
-
 			HideButtons();
+		}
+
+		public void HoverButtonSetup(Powers pow, Button btn) {
+			GameObject hoverTxt = Instantiate(hpTxt.gameObject);
+			HoverText = hoverTxt.GetComponent<Text>();
+			HoverText.transform.SetParent(canvas.transform, false);
+			HoverText.GetComponentInChildren<Text>().text = pow.description + "\nDamage: " + (pow.damage) + "\nUses: " + pow.dmgType + "\nMana Cost: " + pow.manaCost.ToString();
+			HoverText.name = pow.powName + "hovertext";
+			HoverText.gameObject.SetActive(false);
+			HoverText.gameObject.transform.position = hoverTxtPos.position;
+
+			hoverDictionary[btn.name] = HoverText;
+
+			TextGenerator textGen = new TextGenerator();
+		//	TextGenerationSettings genSettings =
 		}
 
 		public void ShowButtons() {
@@ -215,17 +234,17 @@ namespace RPGsys {
 			}
 		}
 
-		public void ButtonHover(PointerEventData data) {
-			Debug.Log("Mouse over button");
-		}
-
 		//use to have button info pop up on screen/clear
-		public void OnPointerEnter() {
+		public void OnPointerEnter(BaseEventData data) {
 			Debug.Log("Mouse over button");
+			hoverDictionary[data.selectedObject.name].gameObject.SetActive(true);
+			//HoverText.gameObject.SetActive(true);
 		}
 
-		public void OnPointerExit() {
+		public void OnPointerExit(BaseEventData data) {
 			Debug.Log("mouse off button");
+			hoverDictionary[data.selectedObject.name].gameObject.SetActive(false);
+			//HoverText.gameObject.SetActive(false);
 		}
 	}
 }

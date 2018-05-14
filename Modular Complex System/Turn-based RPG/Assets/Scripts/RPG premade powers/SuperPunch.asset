@@ -18,6 +18,7 @@ MonoBehaviour:
   target: 1
   anim: 1
   powName: Super Kick!
+  description: Puper Kick!
   duration: 5
   currentEffects:
   - {fileID: 11400000, guid: cba1b809776871647b1a4acfc1f4fc5d, type: 2}

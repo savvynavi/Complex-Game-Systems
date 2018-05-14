@@ -20,7 +20,8 @@ namespace RPGsys
 			KICK,
 			SPELL,
 			ORC_AXE,
-			DEATH
+			DEATH,
+			SHOOT
 		};
 
 		public float manaCost;

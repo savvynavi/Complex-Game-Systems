@@ -16,7 +16,9 @@ MonoBehaviour:
   dmgType: 1
   statType: 4
   target: 0
+  anim: 0
   powName: Firebolt
+  description: Fire that burns
   duration: 2
   currentEffects:
   - {fileID: 11400000, guid: 8cc3bba3102417644b834fca70cf071f, type: 2}

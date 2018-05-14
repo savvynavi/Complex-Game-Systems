@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 namespace RPGsys{
 	public class Character : MonoBehaviour{
-		//add in animations/sounds later
-		//Animator animController;
+		public GameObject selector;
 
 		//base stats
 		public float speedStat;
@@ -69,7 +68,10 @@ namespace RPGsys{
 		public List<Status> currentEffects;
 
 		void Awake(){
-			//material = GetComponent<Renderer>().material;
+			Instantiate(selector);
+			//selector.transform.SetParent(transform, true);
+			selector.SetActive(false);
+
 			Speed = speedStat;
 			Str = strStat;
 			Def = defStat;

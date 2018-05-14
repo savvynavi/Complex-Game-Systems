@@ -14,6 +14,7 @@ namespace RPGsys {
 		EnemyBehaviour enemyBehav;
 		int rand;
 
+		public GameObject selector;
 		public List<Transform> players;
 		public List<Transform> publicEnemies;
 		public float startDelay;
@@ -30,6 +31,8 @@ namespace RPGsys {
 			characters = new List<Character>();
 			enemies = new List<Character>();
 			enemyBehav = FindObjectOfType<EnemyBehaviour>();
+			Instantiate(selector);
+			selector.SetActive(false);
 
 			//filling private lists
 			for(int i = 0; i < players.Count; i++) {
@@ -48,8 +51,6 @@ namespace RPGsys {
 			foreach(Character enemy in enemies) {
 				enemy.GetComponent<EnemyUI>().enemyUISetup();
 			}
-
-			//shows enemy ui
 			foreach(Character enemy in enemies) {
 				enemy.GetComponent<EnemyUI>().ShowUI();
 			}
@@ -92,13 +93,11 @@ namespace RPGsys {
 				}
 			}
 
-			Debug.Log(characters[0].Hp);
-
 			int tmp = 0;
 			foreach(Character chara in characters) {
 				tmp += turnBehaviour.numOfTurns;
 			}
-
+			selector.SetActive(true);
 			//loop through characters and wait until input to move to next one
 			foreach(Character chara in characters) {
 				chara.GetComponent<ButtonBehaviour>().ShowButtons();
@@ -110,6 +109,8 @@ namespace RPGsys {
 
 		//clear menu away, rand select move
 		public IEnumerator EnemyTurn() {
+			yield return new WaitForEndOfFrame();
+			selector.SetActive(false);
 			foreach(Character chara in characters) {
 				chara.GetComponent<ButtonBehaviour>().HideButtons();
 			}
@@ -130,8 +131,6 @@ namespace RPGsys {
 				}
 			}
 
-
-
 			//enemy move selection
 			foreach(Character enemy in enemies) {
 				rand = Random.Range(0, characters.Count);
@@ -144,10 +143,6 @@ namespace RPGsys {
 
 		//loop through moves on a delay, apply to targets
 		public IEnumerator ApplyMoves() {
-			//shows enemy ui
-			//foreach(Character enemy in enemies) {
-			//	enemy.GetComponent<EnemyUI>().HideUI();
-			//}
 
 			//sort move list by speed
 			List<TurnBehaviour.TurnInfo> sortedList = turnBehaviour.MovesThisRound.OrderByDescending(o => o.player.Speed).ToList();
@@ -156,16 +151,23 @@ namespace RPGsys {
 			foreach(TurnBehaviour.TurnInfo info in turnBehaviour.MovesThisRound) {
 				if(info.player.Hp > 0) {
 					info.player.Timer();
-					if(info.player.target.GetComponent<Character>().Hp > 0) {
-						info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
-						string name = info.ability.anim.ToString();
-						info.player.GetComponent<Animator>().Play(name);
-						//ask how to delay playing
-						info.player.target.GetComponent<Animator>().Play("TAKE_DAMAGE");
-					}else {
-						//make select random enemy once targeting implimented
+					if(info.player.target == null) {
+						rand = Random.Range(0, enemies.Count);
+						info.player.target = enemies[rand].gameObject;
 					}
-					
+					if(info.player.target.GetComponent<Character>().Hp <= 0) {
+						//add check if target is null/dead, if so randomly selects enemy to fight
+						rand = Random.Range(0, enemies.Count);
+						while(enemies[rand] == info.player.target.GetComponent<Character>()) {
+							rand = Random.Range(0, enemies.Count);
+						}
+						info.player.target = enemies[rand].gameObject;
+					}
+					info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
+					string name = info.ability.anim.ToString();
+					info.player.GetComponent<Animator>().Play(name);
+					//ask how to delay playing
+					info.player.target.GetComponent<Animator>().Play("TAKE_DAMAGE");
 				}
 
 				yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(1).length + 1.5f);
@@ -187,6 +189,7 @@ namespace RPGsys {
 				attackerTarget.GetComponent<Animator>().Play("DEAD");
 				if(attackerTarget.gameObject.tag == "Enemy") {
 					attackerTarget.GetComponent<EnemyUI>().HideUI();
+					attackerTarget.GetComponent<Collider>().enabled = false;
 				}
 			}
 		}

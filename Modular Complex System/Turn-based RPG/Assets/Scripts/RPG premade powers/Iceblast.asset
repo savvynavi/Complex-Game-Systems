@@ -16,7 +16,9 @@ MonoBehaviour:
   dmgType: 1
   statType: 0
   target: 1
+  anim: 0
   powName: Iceblast
+  description: An Icy Assault
   duration: 5
   currentEffects:
   - {fileID: 11400000, guid: 5f1224aad2926d84195c3ea0306a3460, type: 2}
