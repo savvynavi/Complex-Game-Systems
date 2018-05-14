@@ -6,7 +6,7 @@ using UnityEditor.Events;
 using UnityEngine.EventSystems;
 
 namespace RPGsys {
-	public class ButtonBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+	public class ButtonBehaviour : MonoBehaviour {
 
 		float CharacterCurrentHP;
 		float CharacterMaxHP;
@@ -15,6 +15,8 @@ namespace RPGsys {
 
 		List<Powers> powerList;
 		string charaName;
+
+		//EventTrigger eventTrigger = null;
 
 		public bool playerActivated;
 		public List<Button> buttons;
@@ -38,8 +40,11 @@ namespace RPGsys {
 		public Transform hpTextPos;
 		public Transform mpTextPos;
 
+
+
 		private void Awake() {
 			powerList = GetComponent<Character>().classInfo.classPowers;
+			//eventTrigger = gameObject.GetComponent<EventTrigger>();
 			buttons = new List<Button>();
 		}
 
@@ -135,15 +140,24 @@ namespace RPGsys {
 				int capturedIndex = i;
 				buttons[i].onClick.AddListener(() => HandleClick(capturedIndex));
 
-				//hover button stuff
-				//EventTrigger.Entry entry = new EventTrigger.Entry();
-				//entry.eventID = EventTriggerType.PointerEnter;
-				//entry.callback.AddListener((data) => { ButtonHover((PointerEventData)data); });
+				//hover button stuff (on enter/exit listeners added here)
+				EventTrigger trigger = GetComponent<EventTrigger>();
+				if(trigger == null) {
+					trigger = buttons[i].gameObject.AddComponent<EventTrigger>();
+				}
 
-				//buttons[i].OnPointerEnter.AddListener((data) => ButtonHover((PointerEventData)data));
+				EventTrigger.Entry pointerEnter = new EventTrigger.Entry();
+				pointerEnter.eventID = EventTriggerType.PointerEnter;
+				pointerEnter.callback.AddListener((data) => { OnPointerEnter(); });
+				trigger.triggers.Add(pointerEnter);
+
+				EventTrigger.Entry pointerExit = new EventTrigger.Entry();
+				pointerExit.eventID = EventTriggerType.PointerExit;
+				pointerExit.callback.AddListener((data) => { OnPointerExit(); });
+				trigger.triggers.Add(pointerExit);
+
 				buttons[i].transform.position = btnPositions[i].transform.position;
 			}
-
 
 
 			HideButtons();
@@ -206,11 +220,11 @@ namespace RPGsys {
 		}
 
 		//use to have button info pop up on screen/clear
-		public void OnPointerEnter(PointerEventData eventData) {
+		public void OnPointerEnter() {
 			Debug.Log("Mouse over button");
 		}
 
-		public void OnPointerExit(PointerEventData eventData) {
+		public void OnPointerExit() {
 			Debug.Log("mouse off button");
 		}
 	}

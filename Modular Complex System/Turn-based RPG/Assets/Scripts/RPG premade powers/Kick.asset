@@ -18,5 +18,6 @@ MonoBehaviour:
   target: 1
   anim: 1
   powName: Kick!
+  description: A devestating kick
   duration: 0
   currentEffects: []

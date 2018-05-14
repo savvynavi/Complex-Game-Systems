@@ -30,10 +30,9 @@ namespace RPGsys
 		public Target target;
 		public AbilityAnim anim; 
 		public string powName;
+		public string description;
 		public float duration;
 		public List<Status> currentEffects;
-
-		///public AnimationClip anim;
 
 		public void Apply(Character obj ,Character target){
 
