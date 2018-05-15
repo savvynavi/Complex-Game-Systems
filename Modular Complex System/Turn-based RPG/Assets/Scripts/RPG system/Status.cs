@@ -1,0 +1,60 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace RPGsys{
+	public class Status : ScriptableObject{
+
+		public ParticleSystem particles;
+		protected GameObject partInst;
+		bool particleRunning;
+
+		//public Animation anim;
+		public enum StatusEffectType{
+			DmgBuff,
+			DefBuff,
+			DmgDebuff,
+			Poison,
+			Heal
+		}
+
+		public enum StatusEffectTarget {
+			Self,
+			Target,
+			Group
+		}
+
+		[System.Serializable]
+		public struct StatusEffect{
+			public StatusEffectType effect;
+			public RPGStats.Stats statBuff;
+			public float amount;
+		}
+		public float timer;
+
+		public StatusEffect statusEffect;
+
+		//reduces time by 1 turn each time it's called
+		virtual public void UpdateEffect(Character chara){
+			timer--;
+			if(timer < particles.main.startLifetime.constant) {
+				partInst.GetComponent<ParticleSystem>().Stop();
+			}
+		}
+
+		public virtual void Apply(Character target, float duration) {
+
+		}
+
+		public virtual void Remove(Character target){
+			Destroy(partInst);
+		}
+
+		public void Clone(Character target){
+			// make as copy of the particles
+			partInst = Instantiate(particles.gameObject);
+			partInst.transform.parent = target.transform;
+			partInst.transform.localPosition = Vector3.zero;
+		}
+	}
+}
