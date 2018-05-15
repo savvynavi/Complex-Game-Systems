@@ -2,18 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace RPGsys {
 	public class StateManager : MonoBehaviour {
 		bool gameOver = false;
-		ButtonBehaviour buttons;
+		//ButtonBehaviour buttons;
 		WaitForSeconds endWait;
 		List<Character> characters;
 		List<Character> enemies;
 		TurnBehaviour turnBehaviour;
-		EnemyBehaviour enemyBehav;
+		EnemyBehaviour[] enemyBehav;
 		int rand;
 
+		GameObject GameOverUI;
+		GameObject GameOverTextLose;
+		GameObject GameOverTextWin;
+
+		public Button MainMenu;
+		public Button Quit;
 		public GameObject selector;
 		public List<Transform> players;
 		public List<Transform> publicEnemies;
@@ -25,15 +33,28 @@ namespace RPGsys {
 
 		// Use this for initialization
 		void Start() {
-			buttons = FindObjectOfType<ButtonBehaviour>().GetComponent<ButtonBehaviour>();
+			//buttons = FindObjectOfType<ButtonBehaviour>().GetComponent<ButtonBehaviour>();
 			turnBehaviour = GetComponent<TurnBehaviour>();
 			endWait = new WaitForSeconds(endDelay);
 			characters = new List<Character>();
 			enemies = new List<Character>();
-			enemyBehav = FindObjectOfType<EnemyBehaviour>();
+			enemyBehav = FindObjectsOfType<EnemyBehaviour>();
 			GameObject go = Instantiate(selector);
 			selector = go;
 			selector.SetActive(false);
+
+			//game over menu stuff
+			GameOverUI = GameObject.Find("GameOverMenu");
+			MainMenu.onClick.AddListener(() => HandleClick(MainMenu));
+			Quit.onClick.AddListener(() => HandleClick(Quit));
+
+			GameOverTextLose = GameObject.Find("LoseText");
+			GameOverTextWin = GameObject.Find("WinText");
+
+			GameOverUI.SetActive(false);
+			GameOverTextLose.SetActive(false);
+			GameOverTextWin.SetActive(false);
+
 
 			//filling private lists
 			for(int i = 0; i < players.Count; i++) {
@@ -72,9 +93,23 @@ namespace RPGsys {
 			if(!BattleOver()) {
 				StartCoroutine(GameLoop());
 			}
+
+			Debug.Log("peope are dead now");
+
+			if(BattleOver() == true) {
+				Debug.Log("menu popup");
+				GameOverUI.SetActive(true);
+				if(Alive() == true) {
+					GameOverTextWin.SetActive(true);
+					Debug.Log("you won");
+				} else if(EnemyAlive() == true) {
+					Debug.Log("you lost");
+					GameOverTextLose.SetActive(true);
+				}
+			}
 		}
 
-		//make it pause for user input/menu stuff
+		//Pauses while each character can choose a target + power to use
 		private IEnumerator PlayerTurn() {
 
 			yield return new WaitForEndOfFrame();
@@ -99,11 +134,6 @@ namespace RPGsys {
 				tmp += turnBehaviour.numOfTurns;
 			}
 
-			//foreach(Character chara in characters) {
-			//	chara.GetComponent<TargetSelection>().enabled = true;
-			//}
-
-			//selector.SetActive(true);
 			//loop through characters and wait until input to move to next one
 			foreach(Character chara in characters) {
 				chara.GetComponent<ButtonBehaviour>().ShowButtons();
@@ -133,7 +163,6 @@ namespace RPGsys {
 				chara.GetComponent<TargetSelection>().enabled = false;
 			}
 
-			//selector.SetActive(false);
 			foreach(Character chara in characters) {
 				chara.GetComponent<ButtonBehaviour>().HideButtons();
 			}
@@ -154,12 +183,17 @@ namespace RPGsys {
 				}
 			}
 
-			//enemy move selection
-			foreach(Character enemy in enemies) {
-				rand = Random.Range(0, characters.Count);
-				enemy.target = characters[rand].gameObject;
-				enemyBehav.AddEnemyAttackRand(characters[rand]);
+			for(int i = 0; i < enemies.Count; i++) {
+				for(int j = 0; j < enemyBehav.Count(); j++) {
+					if(enemies[i] == enemyBehav[j].GetChara) {
+						rand = Random.Range(0, characters.Count);
+						enemies[i].target = characters[rand].gameObject;
+						enemyBehav[j].AddEnemyAttackRand(characters[rand]);
+						break;
+					}
+				}
 			}
+
 			yield return new WaitForSeconds(0.5f);
 
 		}
@@ -194,14 +228,15 @@ namespace RPGsys {
 						info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
 						string name = info.ability.anim.ToString();
 						info.player.GetComponent<Animator>().Play(name);
-						//ask how to delay playing
 						info.player.target.GetComponent<Animator>().Play("TAKE_DAMAGE");
 					}
 
 				}
 
 				yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(1).length + 1.5f);
-				Death(info);
+				if(info.player.target != null) {
+					Death(info);
+				}
 			}
 
 			turnBehaviour.MovesThisRound.Clear();
@@ -214,12 +249,14 @@ namespace RPGsys {
 		public void Death(TurnBehaviour.TurnInfo attackerInfo) {
 			Character attackerTarget = attackerInfo.player.target.GetComponent<Character>();
 
-			if(attackerTarget.Hp <= 0) {
-				attackerTarget.Hp = 0;
-				attackerTarget.GetComponent<Animator>().Play("DEAD");
-				if(attackerTarget.gameObject.tag == "Enemy") {
-					attackerTarget.GetComponent<EnemyUI>().HideUI();
-					attackerTarget.GetComponent<Collider>().enabled = false;
+			if(attackerTarget != null) {
+				if(attackerTarget.Hp <= 0) {
+					attackerTarget.Hp = 0;
+					attackerTarget.GetComponent<Animator>().Play("DEAD");
+					if(attackerTarget.gameObject.tag == "Enemy") {
+						attackerTarget.GetComponent<EnemyUI>().HideUI();
+						attackerTarget.GetComponent<Collider>().enabled = false;
+					}
 				}
 			}
 		}
@@ -248,6 +285,14 @@ namespace RPGsys {
 				return true;
 			}
 			return false;
+		}
+
+		public void HandleClick(Button btn) {
+			if(btn.GetComponentInChildren<Text>().text == "Main Menu") {
+				SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+			}else if(btn.GetComponentInChildren<Text>().text == "Quit") {
+				Application.Quit();
+			}
 		}
 	}
 }

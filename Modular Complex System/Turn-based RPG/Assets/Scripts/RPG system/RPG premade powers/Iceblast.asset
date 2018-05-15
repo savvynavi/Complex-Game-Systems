@@ -14,7 +14,7 @@ MonoBehaviour:
   manaCost: 5
   damage: 5
   dmgType: 1
-  statType: 0
+  statType: 3
   target: 1
   anim: 0
   powName: Iceblast

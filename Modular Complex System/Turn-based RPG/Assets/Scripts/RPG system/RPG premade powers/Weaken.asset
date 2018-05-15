@@ -19,6 +19,6 @@ MonoBehaviour:
     statBuff: 0
     amount: 0
   StatusEffects:
-    effect: 2
+    effect: 1
     statBuff: 1
-    amount: 50
+    amount: 20

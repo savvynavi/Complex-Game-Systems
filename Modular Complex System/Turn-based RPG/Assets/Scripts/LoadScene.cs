@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
@@ -11,22 +10,18 @@ public class LoadScene : MonoBehaviour {
 	public Button controls;
 	public Image controlImage;
 	public Button back;
+	public Button quit;
+
+	GameObject controlUI;
 
 	// Use this for initialization
 	void Start () {
-		//Button go = Instantiate(back);
-		//back = go;
-
+		controlUI = GameObject.Find("controlUI");
 		start.onClick.AddListener(() => HandleClick(start));
 		controls.onClick.AddListener(() => HandleClick(controls));
 		back.onClick.AddListener(() => HandleClick(back));
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetKey(KeyCode.Escape)) {
-			Application.Quit();
-		}
+		quit.onClick.AddListener(() => HandleClick(quit));
+		controlUI.SetActive(false);
 	}
 
 	public void HandleClick(Button btn) {
@@ -34,6 +29,11 @@ public class LoadScene : MonoBehaviour {
 			SceneManager.LoadScene("Testing", LoadSceneMode.Single);
 		} else if(btn.GetComponentInChildren<Text>().text == "Controls") {
 			Debug.Log(btn.GetComponentInChildren<Text>().text);
+			controlUI.SetActive(true);
+		}else if(btn.GetComponentInChildren<Text>().text == "Back") {
+			controlUI.SetActive(false);
+		}else if(btn.GetComponentInChildren<Text>().text == "Quit") {
+			Application.Quit();
 		}
 	}
 }

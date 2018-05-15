@@ -11,10 +11,8 @@ namespace RPGsys{
 
 		//public Animation anim;
 		public enum StatusEffectType{
-			DmgBuff,
-			DefBuff,
-			DmgDebuff,
-			Poison,
+			Buff,
+			Debuff,
 			Heal
 		}
 

@@ -20,4 +20,5 @@ MonoBehaviour:
   powName: Heal
   description: heals damage
   duration: 0
-  currentEffects: []
+  currentEffects:
+  - {fileID: 11400000, guid: e0605f3a86d402741b1dad50ad6cfa27, type: 2}

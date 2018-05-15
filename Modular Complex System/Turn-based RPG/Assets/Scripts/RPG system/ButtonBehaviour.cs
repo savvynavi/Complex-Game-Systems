@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.Events;
 using UnityEngine.EventSystems;
 
 namespace RPGsys {
@@ -194,7 +193,7 @@ namespace RPGsys {
 			hpTxt.gameObject.SetActive(true);
 			hpTxt.text = CharacterCurrentHP.ToString() + "/" + CharacterMaxHP.ToString();
 			mpTxt.gameObject.SetActive(true);
-			mpTxt.text = CharacterCurrentMP.ToString() + "/" + CharacterMaxHP.ToString();
+			mpTxt.text = CharacterCurrentMP.ToString() + "/" + CharacterMaxMP.ToString();
 
 
 			foreach(Button btn in buttons) {

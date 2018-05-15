@@ -11,28 +11,13 @@ namespace RPGsys {
 		TurnBehaviour turnBehav = null;
 		int rand;
 
-		public Button button;
-		public Canvas canvas;
-		public List<Transform> btnPos;
-
+		public Character GetChara{
+			get { return chara; }
+		}
+			
 		private void Awake() {
 			chara = GetComponent<Character>();
 			turnBehav = FindObjectOfType<TurnBehaviour>();
-		}
-
-		void enemyButtonSetup(){
-			GameObject go = Instantiate(button.gameObject);
-			button = go.GetComponent<Button>();
-
-			button.transform.SetParent(canvas.transform, false);
-			button.GetComponentInChildren<Text>().text = name;
-
-			button.onClick.AddListener(() => HandleClick());
-		}
-
-		//when the enemy button is clicked, changes the character target that clicked it
-		public void HandleClick() {
-
 		}
 
 		// Update is called once per frame

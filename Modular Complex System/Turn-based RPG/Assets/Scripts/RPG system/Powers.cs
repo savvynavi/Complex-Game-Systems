@@ -21,7 +21,9 @@ namespace RPGsys
 			SPELL,
 			ORC_AXE,
 			DEATH,
-			SHOOT
+			SHOOT,
+			PUNCH,
+			ORC_AXE_2
 		};
 
 		public float manaCost;
@@ -43,43 +45,53 @@ namespace RPGsys
 		public void Apply(Character obj ,Character target){
 
 			float attMod;
-			//get stat that is being affected
-			switch(statType) {
-			case RPGStats.Stats.Speed:
-				attMod = obj.Speed;
-				break;
-			case RPGStats.Stats.Str:
-				attMod = obj.Str;
-				break;
-			case RPGStats.Stats.Def:
-				attMod = obj.Def;
-				break;
-			case RPGStats.Stats.Int:
-				attMod = obj.Int;
-				break;
-			case RPGStats.Stats.Mind:
-				attMod = obj.Mind;
-				break;
-			case RPGStats.Stats.Hp:
-				attMod = obj.Hp;
-				break;
-			case RPGStats.Stats.Mp:
-				attMod = obj.Mp;
-				break;
-			case RPGStats.Stats.Dex:
-				attMod = obj.Dex;
-				break;
-			case RPGStats.Stats.Agi:
-				attMod = obj.Agi;
-				break;
-			default:
-				Debug.Log("no given attack mod type, adding zero to damage");
+			//get stat that is being affected, none applied if no damage set
+			if(damage > 0) {
+				switch(statType) {
+				case RPGStats.Stats.Speed:
+					attMod = obj.Speed;
+					break;
+				case RPGStats.Stats.Str:
+					attMod = obj.Str;
+					break;
+				case RPGStats.Stats.Def:
+					attMod = obj.Def;
+					break;
+				case RPGStats.Stats.Int:
+					attMod = obj.Int;
+					break;
+				case RPGStats.Stats.Mind:
+					attMod = obj.Mind;
+					break;
+				case RPGStats.Stats.Hp:
+					attMod = obj.Hp;
+					break;
+				case RPGStats.Stats.Mp:
+					attMod = obj.Mp;
+					break;
+				case RPGStats.Stats.Dex:
+					attMod = obj.Dex;
+					break;
+				case RPGStats.Stats.Agi:
+					attMod = obj.Agi;
+					break;
+				default:
+					Debug.Log("no given attack mod type, adding zero to damage");
+					attMod = 0;
+					break;
+				}
+			} else {
 				attMod = 0;
-				break;
 			}
 
+
 			//decrease target hp by damage amount + the chatacters given stat
-			target.Hp -= (damage + attMod);
+			if(obj.Mp - manaCost >= 0) {
+				target.Hp -= (damage + attMod);
+				obj.Mp -= manaCost;
+			}
+
+			
 
 			//loops over current effects on this power, applies them to the target
 			for(int i = 0; i < currentEffects.Count; i++) {

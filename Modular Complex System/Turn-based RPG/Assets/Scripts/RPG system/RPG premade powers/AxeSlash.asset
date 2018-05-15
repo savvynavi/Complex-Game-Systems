@@ -16,7 +16,8 @@ MonoBehaviour:
   dmgType: 0
   statType: 1
   target: 1
-  anim: 3
+  anim: 7
   powName: Axe Slash
+  description: 
   duration: 0
   currentEffects: []
