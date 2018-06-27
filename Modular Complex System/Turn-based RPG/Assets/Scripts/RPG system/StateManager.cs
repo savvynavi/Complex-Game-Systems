@@ -128,10 +128,11 @@ namespace RPGsys {
 					characters.Remove(dead);
 				}
 			}
-
+			
 			int tmp = 0;
 			foreach(Character chara in characters) {
 				tmp += turnBehaviour.numOfTurns;
+				chara.GetComponent<Animator>().SetBool("IdleTransition", true);
 			}
 
 			//loop through characters and wait until input to move to next one
@@ -151,6 +152,8 @@ namespace RPGsys {
 				while(chara.GetComponent<ButtonBehaviour>().playerActivated == false) {
 					yield return null;
 				}
+				//sets character to animation to indicate that their move has passed
+				chara.GetComponent<Animator>().SetBool("IdleTransition", false);
 			}
 		}
 
@@ -225,10 +228,20 @@ namespace RPGsys {
 					}
 
 					if(info.player.target != null) {
+						//turn player towards target
+						info.player.transform.LookAt(info.player.target.transform);
+
+						//does damage/animations
 						info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
 						string name = info.ability.anim.ToString();
 						info.player.GetComponent<Animator>().Play(name);
 						info.player.target.GetComponent<Animator>().Play("TAKE_DAMAGE");
+						//if player character, will allow them to go back to isle anim 
+						if(info.player.tag != "Enemy") {
+							info.player.GetComponent<Animator>().SetBool("IdleTransition", true);
+						}
+						//reset player rotation(find better spot for this, currently overrides earlier lookat)
+						info.player.transform.LookAt(new Vector3(-0.5f, 0, -3.5f));
 					}
 
 				}

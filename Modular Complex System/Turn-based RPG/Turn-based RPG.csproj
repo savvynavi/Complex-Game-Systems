@@ -321,7 +321,6 @@
     <Compile Include="Assets\Materials\FarlandSkies\Demo\Scripts\Skybox\SkyboxChanger.cs" />
     <Compile Include="Assets\Materials\FarlandSkies\Demo\Scripts\Skybox\SkyboxRotator.cs" />
     <Compile Include="Assets\Mixamo\Magic Pack\Demo\CameraScroll.cs" />
-    <Compile Include="Assets\Models\amusedART\Mushroom_Monster\Script\MushroomMon_Ani_Test.cs" />
     <Compile Include="Assets\Scripts\LoadScene.cs" />
     <Compile Include="Assets\Scripts\RPG system\Buff.cs" />
     <Compile Include="Assets\Scripts\RPG system\ButtonBehaviour.cs" />
