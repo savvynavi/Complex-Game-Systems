@@ -15,11 +15,13 @@ namespace RPGsys {
 		TurnBehaviour turnBehaviour;
 		EnemyBehaviour[] enemyBehav;
 		int rand;
+		Quaternion originalRotation;
 
 		GameObject GameOverUI;
 		GameObject GameOverTextLose;
 		GameObject GameOverTextWin;
 
+		public float speed;
 		public Button MainMenu;
 		public Button Quit;
 		public GameObject selector;
@@ -209,6 +211,7 @@ namespace RPGsys {
 			turnBehaviour.MovesThisRound = sortedList;
 
 			foreach(TurnBehaviour.TurnInfo info in turnBehaviour.MovesThisRound) {
+				originalRotation = info.player.transform.rotation;
 				if(info.player.Hp > 0) {
 					info.player.Timer();
 					if(info.player.target == null) {
@@ -229,6 +232,7 @@ namespace RPGsys {
 
 					if(info.player.target != null) {
 						//turn player towards target
+
 						info.player.transform.LookAt(info.player.target.transform);
 
 						//does damage/animations
@@ -240,17 +244,29 @@ namespace RPGsys {
 						if(info.player.tag != "Enemy") {
 							info.player.GetComponent<Animator>().SetBool("IdleTransition", true);
 						}
-						//reset player rotation(find better spot for this, currently overrides earlier lookat)
-						info.player.transform.LookAt(new Vector3(-0.5f, 0, -3.5f));
+						//reset player rotation
+						float step = speed * Time.deltaTime;
+						//info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
 					}
-
 				}
+
+				info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
+
 
 				yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(1).length + 1.5f);
 				if(info.player.target != null) {
 					Death(info);
 				}
 			}
+
+			//reset player lookat
+			//foreach(TurnBehaviour.TurnInfo info in turnBehaviour.MovesThisRound) {
+			//	//reset player rotation(find better spot for this, currently overrides earlier lookat)
+			//	//info.player.transform.LookAt(new Vector3(-0.5f, 0, -3.5f));
+			//	float step = speed * Time.deltaTime;
+			//	//info.player.transform.rotation = Quaternion.RotateTowards(info.player.transform.rotation, new Quaternion(-0.5f, 0, -3.5f), step);
+			//	info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
+			//}
 
 			turnBehaviour.MovesThisRound.Clear();
 			turnBehaviour.numOfTurns = turnBehaviour.AvailablePlayers.Count;
@@ -266,6 +282,12 @@ namespace RPGsys {
 				if(attackerTarget.Hp <= 0) {
 					attackerTarget.Hp = 0;
 					attackerTarget.GetComponent<Animator>().Play("DEAD");
+
+					//remove buff effects on death
+					foreach(Buff buff in attackerTarget.currentEffects) {
+						buff.UpdateEffect(attackerTarget);
+					}
+
 					if(attackerTarget.gameObject.tag == "Enemy") {
 						attackerTarget.GetComponent<EnemyUI>().HideUI();
 						attackerTarget.GetComponent<Collider>().enabled = false;

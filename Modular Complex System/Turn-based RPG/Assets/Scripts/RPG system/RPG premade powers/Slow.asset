@@ -13,6 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particles: {fileID: 198633673530477644, guid: e8e5386c3208707478cc91d039c0c2d4,
     type: 2}
+  material: {fileID: 2100000, guid: c1b8df6c5c3802e4ca106a0c66aa3607, type: 2}
   timer: 0
   statusEffect:
     effect: 0

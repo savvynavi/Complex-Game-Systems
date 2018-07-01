@@ -25,8 +25,6 @@ namespace RPGsys {
 		}
 
 		void SetStats(Character target) {
-			//does effect here, fix later(not sustainable)
-
 
 			//RPGStats.Stats tmp = 0;
 			switch(StatusEffects.effect) {

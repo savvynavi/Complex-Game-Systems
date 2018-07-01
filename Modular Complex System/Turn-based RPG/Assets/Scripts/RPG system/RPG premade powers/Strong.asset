@@ -11,8 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7d1f87acd36bf499445ddfc0b92fe2, type: 3}
   m_Name: Strong
   m_EditorClassIdentifier: 
-  particles: {fileID: 198129240231885858, guid: 0f92016894cc0064e9f72aa60a8fe364,
-    type: 2}
+  particles: {fileID: 0}
+  material: {fileID: 2100000, guid: c6ba578bb72862e4d85f78a32ed8bbad, type: 2}
   timer: 0
   statusEffect:
     effect: 0
