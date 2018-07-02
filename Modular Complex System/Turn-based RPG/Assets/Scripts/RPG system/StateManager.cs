@@ -232,7 +232,6 @@ namespace RPGsys {
 
 					if(info.player.target != null) {
 						//turn player towards target
-
 						info.player.transform.LookAt(info.player.target.transform);
 
 						//does damage/animations
@@ -246,27 +245,18 @@ namespace RPGsys {
 						}
 						//reset player rotation
 						float step = speed * Time.deltaTime;
-						//info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
+
+						//waits for attack anim to finish before spinning character back towards front
+						yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length - info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime);
+						info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
 					}
 				}
-
-				info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
-
 
 				yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(1).length + 1.5f);
 				if(info.player.target != null) {
 					Death(info);
 				}
 			}
-
-			//reset player lookat
-			//foreach(TurnBehaviour.TurnInfo info in turnBehaviour.MovesThisRound) {
-			//	//reset player rotation(find better spot for this, currently overrides earlier lookat)
-			//	//info.player.transform.LookAt(new Vector3(-0.5f, 0, -3.5f));
-			//	float step = speed * Time.deltaTime;
-			//	//info.player.transform.rotation = Quaternion.RotateTowards(info.player.transform.rotation, new Quaternion(-0.5f, 0, -3.5f), step);
-			//	info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
-			//}
 
 			turnBehaviour.MovesThisRound.Clear();
 			turnBehaviour.numOfTurns = turnBehaviour.AvailablePlayers.Count;
