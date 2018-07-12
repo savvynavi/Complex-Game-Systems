@@ -40,7 +40,7 @@ namespace RPGsys {
 					break;
 				}
 			case StatusEffectType.Heal: {
-					target.Hp += statusEffect.amount;
+					target.Hp += StatusEffects.amount;
 					break;
 				}
 			default:

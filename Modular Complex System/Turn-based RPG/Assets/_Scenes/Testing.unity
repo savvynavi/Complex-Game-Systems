@@ -161,11 +161,6 @@ MonoBehaviour:
   - {fileID: 0}
   button: {fileID: 114310072343085520, guid: 22c396f2ea8024f4e87de412d8b9f3b8, type: 2}
   canvas: {fileID: 530759652}
-  btnPositions:
-  - {fileID: 1281099766}
-  - {fileID: 965364029}
-  - {fileID: 253684596}
-  - {fileID: 1012524683}
   paperPos: {fileID: 1207956667}
   menuBG: {fileID: 114529533871621078, guid: 3ff9f13f82b4247498d271405a84697b, type: 2}
   namePos: {fileID: 1069733187}
@@ -175,8 +170,8 @@ MonoBehaviour:
   mpPosition: {fileID: 1328722223}
   hp: {fileID: 114851239606326738, guid: 1af6378958fe6224180f135ec6584b89, type: 2}
   mp: {fileID: 114480177051114742, guid: 15be1b34f05ba304282d503415feed2c, type: 2}
-  bg1: {fileID: 114934242876710360, guid: 9be7b11018955ba4da852834b4516c79, type: 2}
-  bg2: {fileID: 114633511577940894, guid: 0afc2d89ca9bb3f45af96e11c79e709e, type: 2}
+  background: {fileID: 114934242876710360, guid: 9be7b11018955ba4da852834b4516c79,
+    type: 2}
   hpTxt: {fileID: 114078524503352888, guid: df446a29b102a734c88d19993c2b80b0, type: 2}
   mpTxt: {fileID: 114078524503352888, guid: df446a29b102a734c88d19993c2b80b0, type: 2}
   hpTextPos: {fileID: 1930692222}
@@ -293,7 +288,7 @@ RectTransform:
   m_LocalScale: {x: 0.53756887, y: 0.53756887, z: 0.53756887}
   m_Children: []
   m_Father: {fileID: 530759656}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -836,11 +831,6 @@ MonoBehaviour:
   - {fileID: 0}
   button: {fileID: 114310072343085520, guid: 22c396f2ea8024f4e87de412d8b9f3b8, type: 2}
   canvas: {fileID: 530759652}
-  btnPositions:
-  - {fileID: 1281099766}
-  - {fileID: 965364029}
-  - {fileID: 253684596}
-  - {fileID: 1012524683}
   paperPos: {fileID: 1207956667}
   menuBG: {fileID: 114529533871621078, guid: 3ff9f13f82b4247498d271405a84697b, type: 2}
   namePos: {fileID: 1069733187}
@@ -850,8 +840,8 @@ MonoBehaviour:
   mpPosition: {fileID: 1328722223}
   hp: {fileID: 114851239606326738, guid: 1af6378958fe6224180f135ec6584b89, type: 2}
   mp: {fileID: 114480177051114742, guid: 15be1b34f05ba304282d503415feed2c, type: 2}
-  bg1: {fileID: 114934242876710360, guid: 9be7b11018955ba4da852834b4516c79, type: 2}
-  bg2: {fileID: 114633511577940894, guid: 0afc2d89ca9bb3f45af96e11c79e709e, type: 2}
+  background: {fileID: 114934242876710360, guid: 9be7b11018955ba4da852834b4516c79,
+    type: 2}
   hpTxt: {fileID: 114078524503352888, guid: df446a29b102a734c88d19993c2b80b0, type: 2}
   mpTxt: {fileID: 114078524503352888, guid: df446a29b102a734c88d19993c2b80b0, type: 2}
   hpTextPos: {fileID: 1930692222}
@@ -1849,7 +1839,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &489281577 stripped
 Transform:
@@ -2008,12 +1998,12 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1945411586}
-  - {fileID: 1633920222}
   - {fileID: 1542057137}
   - {fileID: 21034521}
+  - {fileID: 1633920222}
   - {fileID: 54412245}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2858,7 +2848,7 @@ Prefab:
     - target: {fileID: 224193875636589226, guid: 22c396f2ea8024f4e87de412d8b9f3b8,
         type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224193875636589226, guid: 22c396f2ea8024f4e87de412d8b9f3b8,
         type: 2}
@@ -3377,7 +3367,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 28.023, y: 0, z: 0}
 --- !u!1001 &984080113
 Prefab:
@@ -3689,7 +3679,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -270, y: -30.422714}
+  m_AnchoredPosition: {x: -260.3, y: -16.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1085209015
@@ -4710,7 +4700,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1509262197
 GameObject:
@@ -4780,7 +4770,7 @@ Transform:
   - {fileID: 491396082}
   - {fileID: 1261487075}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1542057136
 GameObject:
@@ -4811,7 +4801,7 @@ RectTransform:
   - {fileID: 886328791}
   - {fileID: 689326404}
   m_Father: {fileID: 530759656}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5089,11 +5079,6 @@ MonoBehaviour:
   - {fileID: 0}
   button: {fileID: 114310072343085520, guid: 22c396f2ea8024f4e87de412d8b9f3b8, type: 2}
   canvas: {fileID: 530759652}
-  btnPositions:
-  - {fileID: 1281099766}
-  - {fileID: 965364029}
-  - {fileID: 253684596}
-  - {fileID: 1012524683}
   paperPos: {fileID: 1207956667}
   menuBG: {fileID: 114529533871621078, guid: 3ff9f13f82b4247498d271405a84697b, type: 2}
   namePos: {fileID: 1069733187}
@@ -5103,8 +5088,8 @@ MonoBehaviour:
   mpPosition: {fileID: 1328722223}
   hp: {fileID: 114851239606326738, guid: 1af6378958fe6224180f135ec6584b89, type: 2}
   mp: {fileID: 114480177051114742, guid: 15be1b34f05ba304282d503415feed2c, type: 2}
-  bg1: {fileID: 114934242876710360, guid: 9be7b11018955ba4da852834b4516c79, type: 2}
-  bg2: {fileID: 114633511577940894, guid: 0afc2d89ca9bb3f45af96e11c79e709e, type: 2}
+  background: {fileID: 114934242876710360, guid: 9be7b11018955ba4da852834b4516c79,
+    type: 2}
   hpTxt: {fileID: 114078524503352888, guid: df446a29b102a734c88d19993c2b80b0, type: 2}
   mpTxt: {fileID: 114078524503352888, guid: df446a29b102a734c88d19993c2b80b0, type: 2}
   hpTextPos: {fileID: 1930692222}
@@ -5308,7 +5293,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5685,7 +5670,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1831685754 stripped
 Transform:

@@ -33,8 +33,6 @@ namespace RPGsys{
 		}
 		public float timer;
 
-		public StatusEffect statusEffect;
-
 		//reduces time by 1 turn each time it's called
 		virtual public void UpdateEffect(Character chara) {
 			timer--;

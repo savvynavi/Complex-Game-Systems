@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224639750907149326}
   - component: {fileID: 222901083877602326}
   - component: {fileID: 114529533871621078}
+  - component: {fileID: 114472961863179710}
   m_Layer: 5
   m_Name: paper
   m_TagString: Untagged
@@ -28,6 +29,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &114472961863179710
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1236942408937460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 45
+    m_Right: 35
+    m_Top: 59
+    m_Bottom: 61
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 160, y: 30}
+  m_Spacing: {x: 10, y: 10}
+  m_Constraint: 1
+  m_ConstraintCount: 2
 --- !u!114 &114529533871621078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -69,7 +93,7 @@ RectTransform:
   m_GameObject: {fileID: 1236942408937460}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 38.062317}
-  m_LocalScale: {x: 9.158864, y: 1.6138557, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -77,5 +101,5 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 82, y: -81.6579}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 880, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}

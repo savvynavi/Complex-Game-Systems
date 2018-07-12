@@ -85,22 +85,6 @@ namespace RPGsys{
 			anim = GetComponent<Animator>();
 		}
 
-		void Update(){
-			//UpdateStats();
-		}
-
-		void UpdateStats(){
-			speedStat = Speed;
-			strStat = Str;
-			defStat = Def;
-			intStat = Int;
-			mindStat = Mind;
-			hpStat = Hp;
-			mpStat = Mp;
-			dexStat = Dex;
-			agiStat = Agi;
-		}
-
 		//if timer less than zero, remove from effect list
 		public void Timer(){
 			List<Status> deadEffects = new List<Status>();
