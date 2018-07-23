@@ -20,6 +20,8 @@ namespace RPGsys{
 		public ClassInfo classInfo;
 		public Animator anim;
 
+		public int ChoiceOrder;
+
 		//dictionary stuff
 		public Dictionary<RPGStats.Stats, float> CharaStats = new Dictionary<RPGStats.Stats, float>();
 

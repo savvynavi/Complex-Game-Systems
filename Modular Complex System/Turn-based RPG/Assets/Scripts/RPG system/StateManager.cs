@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 namespace RPGsys {
 	public class StateManager : MonoBehaviour {
-		bool gameOver = false;
-		//ButtonBehaviour buttons;
+		public bool confirmMoves = false;
 		WaitForSeconds endWait;
 		List<Character> characters;
 		List<Character> enemies;
@@ -20,23 +19,20 @@ namespace RPGsys {
 		GameObject GameOverUI;
 		GameObject GameOverTextLose;
 		GameObject GameOverTextWin;
+		MoveConfirmMenu confirmMenu;
 
 		public float speed;
 		public Button MainMenu;
 		public Button Quit;
 		public GameObject selector;
-		public List<Transform> players;
-		public List<Transform> publicEnemies;
 		public float startDelay;
 		public float endDelay;
 
-		//////CHANGE ALL LISTS TO USE THE TURNbEHAV ONES FOR CLARITY
-
-
 		// Use this for initialization
 		void Start() {
-			//buttons = FindObjectOfType<ButtonBehaviour>().GetComponent<ButtonBehaviour>();
 			turnBehaviour = GetComponent<TurnBehaviour>();
+			confirmMenu = GetComponent<MoveConfirmMenu>();
+
 			endWait = new WaitForSeconds(endDelay);
 			characters = new List<Character>();
 			enemies = new List<Character>();
@@ -57,14 +53,24 @@ namespace RPGsys {
 			GameOverTextLose.SetActive(false);
 			GameOverTextWin.SetActive(false);
 
-
-			//filling private lists
-			for(int i = 0; i < players.Count; i++) {
-				characters.Add(players[i].GetComponent<Character>());
+			//grabbing players/enemies from the scene to fill lists
+			GameObject[] tmp;
+			tmp = GameObject.FindGameObjectsWithTag("Player");
+			foreach(GameObject chara in tmp) {
+				if(chara.GetComponent<Character>() != null) {
+					characters.Add(chara.GetComponent<Character>());
+				}
 			}
 
-			for(int i = 0; i < publicEnemies.Count; i++) {
-				enemies.Add(publicEnemies[i].GetComponent<Character>());
+			//sort player list based on their choiceOrder number(so you can make it that the closest one to the screen picks first ect)
+			List<Character> sortedList = characters.OrderBy(o => o.ChoiceOrder).ToList();
+			characters = sortedList;
+
+			tmp = GameObject.FindGameObjectsWithTag("Enemy");
+			foreach(GameObject enemy in tmp) {
+				if(enemy.GetComponent<Character>() != null) {
+					enemies.Add(enemy.GetComponent<Character>());
+				}
 			}
 
 			foreach(Character chara in characters) {
@@ -79,6 +85,10 @@ namespace RPGsys {
 				enemy.GetComponent<EnemyUI>().ShowUI();
 			}
 
+
+			turnBehaviour.Setup(characters, enemies);
+			confirmMenu.Setup();
+
 			//starting game loops
 			StartCoroutine(GameLoop());
 		}
@@ -88,6 +98,7 @@ namespace RPGsys {
 
 
 			yield return PlayerTurn();
+			yield return LockInMoves();
 			yield return EnemyTurn();
 			yield return ApplyMoves();
 
@@ -156,7 +167,17 @@ namespace RPGsys {
 				}
 				//sets character to animation to indicate that their move has passed
 				chara.GetComponent<Animator>().SetBool("IdleTransition", false);
+				chara.GetComponent<ButtonBehaviour>().HideButtons();
 			}
+		}
+
+		public IEnumerator LockInMoves() {
+			confirmMenu.ShowMenu();
+			while(confirmMoves != true) {
+				yield return null;
+			}
+			confirmMenu.HideMenu();
+			yield return true;
 		}
 
 		//clear menu away, rand select move

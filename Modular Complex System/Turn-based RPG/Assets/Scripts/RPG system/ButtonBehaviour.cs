@@ -20,25 +20,29 @@ namespace RPGsys {
 		public bool playerActivated;
 		public List<Button> buttons;
 		public Button button;
+		public Text font;
 		public GameObject canvas;
-		public Transform paperPos;
+		public Transform menuPos;
 		public Image menuBG;
 		public Transform namePos;
-		public Text charaNameText;
 
+		public Image hpImage;
+		public Image mpImage;
 		public Transform hpPosition;
 		public Transform mpPosition;
-
-		public Image hp;
-		public Image mp;
-		public Image background;
-
-		public Text hpTxt;
-		public Text mpTxt;
 		public Transform hpTextPos;
 		public Transform mpTextPos;
+		public Image hpBackground;
+
 		public Transform hoverTxtPos;
 
+		Text charaNameText;
+		Image hp;
+		Image mp;
+		Image hpBg;
+		Image mpBg;
+		Text hpTxt;
+		Text mpTxt;
 
 
 		private void Awake() {
@@ -79,44 +83,44 @@ namespace RPGsys {
 			GameObject tmpPaper = Instantiate(menuBG.gameObject);
 			menuBG = tmpPaper.GetComponent<Image>();
 			menuBG.transform.SetParent(canvas.transform, false);
-			menuBG.transform.position = paperPos.transform.position;
+			menuBG.transform.position = menuPos.transform.position;
 
 			//hp/mp bars/bg
-			GameObject tmpbg1 = Instantiate(background.gameObject);
-			background = tmpbg1.GetComponent<Image>();
-			background.transform.SetParent(canvas.transform, false);
-			background.transform.position = hpPosition.transform.position;
+			GameObject tmpbg1 = Instantiate(hpBackground.gameObject);
+			hpBg = tmpbg1.GetComponent<Image>();
+			hpBg.transform.SetParent(canvas.transform, false);
+			hpBg.transform.position = hpPosition.transform.position;
 
-			GameObject tmpHp = Instantiate(hp.gameObject);
+			GameObject tmpHp = Instantiate(hpImage.gameObject);
 			hp = tmpHp.GetComponent<Image>();
 			hp.transform.SetParent(canvas.transform, false);
 			hp.transform.position = hpPosition.transform.position;
 
-			GameObject tmpbg2 = Instantiate(background.gameObject);
-			background = tmpbg2.GetComponent<Image>();
-			background.transform.SetParent(canvas.transform, false);
-			background.transform.position = mpPosition.transform.position;
+			GameObject tmpbg2 = Instantiate(hpBackground.gameObject);
+			mpBg = tmpbg2.GetComponent<Image>();
+			mpBg.transform.SetParent(canvas.transform, false);
+			mpBg.transform.position = mpPosition.transform.position;
 
-			GameObject tmpMp = Instantiate(mp.gameObject);
+			GameObject tmpMp = Instantiate(mpImage.gameObject);
 			mp = tmpMp.GetComponent<Image>();
 			mp.transform.SetParent(canvas.transform, false);
 			mp.transform.position = mpPosition.transform.position;
 
 			//hp/mp text
-			GameObject tmpHpTxt = Instantiate(hpTxt.gameObject);
+			GameObject tmpHpTxt = Instantiate(font.gameObject);
 			hpTxt = tmpHpTxt.GetComponent<Text>();
 			hpTxt.transform.SetParent(canvas.transform, false);
 			hpTxt.transform.position = hpTextPos.transform.position;
 			hpTxt.text = CharacterCurrentHP.ToString() +  "/" + CharacterMaxHP.ToString();
 
-			GameObject tmpMpTxt = Instantiate(mpTxt.gameObject);
+			GameObject tmpMpTxt = Instantiate(font.gameObject);
 			mpTxt = tmpMpTxt.GetComponent<Text>();
 			mpTxt.transform.SetParent(canvas.transform, false);
 			mpTxt.transform.position = mpTextPos.transform.position;
 			mpTxt.text = CharacterCurrentMP.ToString() + "/" + CharacterMaxHP.ToString();
 
 			//player name
-			GameObject tmpTxt = Instantiate(charaNameText.gameObject);
+			GameObject tmpTxt = Instantiate(font.gameObject);
 			charaNameText = tmpTxt.GetComponent<Text>();
 			charaNameText.transform.SetParent(canvas.transform, false);
 			charaNameText.transform.position = namePos.transform.position;
@@ -126,9 +130,6 @@ namespace RPGsys {
 			foreach(Powers pow in powerList) {
 				GameObject go = Instantiate(button.gameObject);
 				button = go.GetComponent<Button>();
-
-				//button.transform.position = transform.position + (32 * count) * Vector3.up;
-				//button.transform.SetParent(canvas.transform, false);
 				button.transform.SetParent(menuBG.transform, false);
 				button.name = pow.powName + "(" + (count + 1) + ")";
 				button.GetComponentInChildren<Text>().text = pow.powName;
@@ -186,8 +187,8 @@ namespace RPGsys {
 			float mpScale = Mathf.Clamp01(CharacterCurrentMP / CharacterMaxMP);
 			mp.fillAmount = mpScale;
 
-			background.gameObject.SetActive(true);
-			background.gameObject.SetActive(true);
+			mpBg.gameObject.SetActive(true);
+			hpBg.gameObject.SetActive(true);
 			hpTxt.gameObject.SetActive(true);
 			hpTxt.text = CharacterCurrentHP.ToString() + "/" + CharacterMaxHP.ToString();
 			mpTxt.gameObject.SetActive(true);
@@ -205,8 +206,8 @@ namespace RPGsys {
 			charaNameText.gameObject.SetActive(false);
 			hp.gameObject.SetActive(false);
 			mp.gameObject.SetActive(false);
-			background.gameObject.SetActive(false);
-			background.gameObject.SetActive(false);
+			mpBg.gameObject.SetActive(false);
+			hpBg.gameObject.SetActive(false);
 			hpTxt.gameObject.SetActive(false);
 			mpTxt.gameObject.SetActive(false);
 			HoverText.gameObject.SetActive(false);

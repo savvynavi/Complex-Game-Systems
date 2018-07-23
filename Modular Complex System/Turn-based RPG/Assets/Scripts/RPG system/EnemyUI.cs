@@ -13,8 +13,9 @@ namespace RPGsys {
 
 		public Image hp;
 		public Image mp;
-		public Image bg1;
-		public Image bg2;
+		public Image bg;
+		Image bg1;
+		Image bg2;
 		public GameObject canvas;
 
 		private void Awake() {
@@ -52,7 +53,7 @@ namespace RPGsys {
 
 		public void enemyUISetup() {
 			//hp/mp bars/bg
-			GameObject tmpbg1 = Instantiate(bg1.gameObject);
+			GameObject tmpbg1 = Instantiate(bg.gameObject);
 			bg1 = tmpbg1.GetComponent<Image>();
 			bg1.transform.SetParent(canvas.transform, false);
 			bg1.transform.position = chara.transform.position + Vector3.up * 2;
@@ -62,7 +63,7 @@ namespace RPGsys {
 			hp.transform.SetParent(canvas.transform, false);
 			hp.transform.position = chara.transform.position + Vector3.up * 2;
 
-			GameObject tmpbg2 = Instantiate(bg2.gameObject);
+			GameObject tmpbg2 = Instantiate(bg.gameObject);
 			bg2 = tmpbg2.GetComponent<Image>();
 			bg2.transform.SetParent(canvas.transform, false);
 			bg2.transform.position = chara.transform.position + Vector3.up * 2.25f;

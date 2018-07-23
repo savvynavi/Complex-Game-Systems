@@ -7,8 +7,8 @@ namespace RPGsys {
 		ButtonBehaviour button = null;
 
 		public List<Powers> abilitiesThisRound;
-		public List<Transform> AvailablePlayers;
-		public List<Transform> AvailableEnemies;
+		public List<Character> AvailablePlayers;
+		public List<Character> AvailableEnemies;
 		public List<TurnInfo> MovesThisRound;
 		public int numOfTurns;
 		public int numOfEnemyTurns;
@@ -21,6 +21,13 @@ namespace RPGsys {
 
 		// Use this for initialization
 		void Start() {
+			
+		}
+
+		public void Setup(List<Character> players, List<Character> enemies) {
+			AvailablePlayers = players;
+			AvailableEnemies = enemies;
+
 			//find better solution won't work w/ mult button
 			button = FindObjectOfType<ButtonBehaviour>().GetComponent<ButtonBehaviour>();
 			numOfTurns = AvailablePlayers.Count;
