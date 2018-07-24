@@ -1786,6 +1786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   confirmMoves: 0
+  redoTurn: 0
   speed: 4
   MainMenu: {fileID: 1782502375}
   Quit: {fileID: 607251642}

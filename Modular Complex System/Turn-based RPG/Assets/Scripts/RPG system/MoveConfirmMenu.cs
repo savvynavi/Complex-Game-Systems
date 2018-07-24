@@ -30,7 +30,7 @@ namespace RPGsys {
 			GameObject go = Instantiate(button.gameObject);
 			button = go.GetComponent<Button>();
 			button.transform.SetParent(menuBG.transform, false);
-			button.GetComponentInChildren<Text>().text = "Confirm Moves?";
+			button.GetComponentInChildren<Text>().text = "Confirm Moves";
 
 			go = Instantiate(button.gameObject);
 			goBackTurn = go.GetComponent<Button>();
@@ -58,6 +58,10 @@ namespace RPGsys {
 		//when button clicked, does this SET UP SO IT CAN DO DIFFERENT IENUM THINGS
 		public void HandleClick(Button btn) {
 			stateManager.confirmMoves = true;
+			if(btn.GetComponentInChildren<Text>().text == "Go Back?") {
+				stateManager.redoTurn = true;
+				Debug.Log("redoing turn");
+			}
 		}
 	}
 }

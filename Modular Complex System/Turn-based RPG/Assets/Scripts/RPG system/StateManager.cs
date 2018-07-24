@@ -8,6 +8,7 @@ using UnityEngine.UI;
 namespace RPGsys {
 	public class StateManager : MonoBehaviour {
 		public bool confirmMoves = false;
+		public bool redoTurn = false;
 		WaitForSeconds endWait;
 		List<Character> characters;
 		List<Character> enemies;
@@ -98,13 +99,15 @@ namespace RPGsys {
 
 
 			yield return PlayerTurn();
-			yield return LockInMoves();
+			while(confirmMoves == false){
+				yield return LockInMoves();
+			}
 			yield return EnemyTurn();
 			yield return ApplyMoves();
 
 			//checking if alive to keep looping
 			if(!BattleOver()) {
-				StartCoroutine(GameLoop());
+				yield return GameLoop();
 			}
 
 			Debug.Log("peope are dead now");
@@ -124,9 +127,9 @@ namespace RPGsys {
 
 		//Pauses while each character can choose a target + power to use
 		private IEnumerator PlayerTurn() {
-
 			yield return new WaitForEndOfFrame();
-
+			redoTurn = false;
+			confirmMoves = false;
 			List<Character> deadCharacters = new List<Character>();
 			//if dead, remove from list
 			foreach(Character chara in characters) {
@@ -177,6 +180,10 @@ namespace RPGsys {
 				yield return null;
 			}
 			confirmMenu.HideMenu();
+			if(redoTurn == true) {
+				Debug.Log("in the yield now going to player turn again");
+				yield return PlayerTurn();
+			}
 			yield return true;
 		}
 
