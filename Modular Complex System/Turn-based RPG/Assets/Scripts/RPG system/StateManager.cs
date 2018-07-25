@@ -130,6 +130,11 @@ namespace RPGsys {
 			yield return new WaitForEndOfFrame();
 			redoTurn = false;
 			confirmMoves = false;
+			//characters.GetComponent<ButtonBehaviour>().undoMove = false;
+			foreach(Character chara in characters) {
+				chara.GetComponent<ButtonBehaviour>().undoMove = false;
+			}
+
 			List<Character> deadCharacters = new List<Character>();
 			//if dead, remove from list
 			foreach(Character chara in characters) {
@@ -152,25 +157,60 @@ namespace RPGsys {
 			}
 
 			//loop through characters and wait until input to move to next one
-			foreach(Character chara in characters) {
-				chara.GetComponent<ButtonBehaviour>().ShowButtons();
+			//foreach(Character chara in characters) {
+			//	//loops through and turns on only the UI/target cylinder for the current player
+			//	chara.GetComponent<ButtonBehaviour>().ShowButtons();
+			//	foreach(Character chara2 in characters) {
+			//		chara2.GetComponent<TargetSelection>().enabled = false;
+			//	}
+			//	chara.GetComponent<TargetSelection>().enabled = true;
 
+			//	if(chara.target != null) {
+			//		selector.transform.position = chara.target.transform.position;
 
+			//	}
+			//	while(chara.GetComponent<ButtonBehaviour>().playerActivated == false) {
+			//		yield return null;
+			//	}
+			//	//sets character to animation to indicate that their move has passed
+			//	chara.GetComponent<Animator>().SetBool("IdleTransition", false);
+			//	chara.GetComponent<ButtonBehaviour>().HideButtons();
+			//}
+
+			for(int i = 0; i < characters.Count; i++) {
+				characters[i].GetComponent<ButtonBehaviour>().ShowButtons();
 				foreach(Character chara2 in characters) {
 					chara2.GetComponent<TargetSelection>().enabled = false;
 				}
-				chara.GetComponent<TargetSelection>().enabled = true;
+				characters[i].GetComponent<TargetSelection>().enabled = true;
 
-				if(chara.target != null) {
-					selector.transform.position = chara.target.transform.position;
+				if(characters[i].target != null) {
+					selector.transform.position = characters[i].target.transform.position;
 
 				}
-				while(chara.GetComponent<ButtonBehaviour>().playerActivated == false) {
+
+
+
+				while(characters[i].GetComponent<ButtonBehaviour>().playerActivated == false) {
+					if(characters[i].GetComponent<ButtonBehaviour>().undoMove == true) {
+						characters[i].GetComponent<ButtonBehaviour>().HideButtons();
+						characters[i].GetComponent<ButtonBehaviour>().undoMove = false;
+						Debug.Log("Undoing Action");
+						i--;
+						break;
+					}
 					yield return null;
 				}
-				//sets character to animation to indicate that their move has passed
-				chara.GetComponent<Animator>().SetBool("IdleTransition", false);
-				chara.GetComponent<ButtonBehaviour>().HideButtons();
+
+				//cause UI to go back a character if button pressed
+				// else {
+					//sets character to animation to indicate that their move has passed
+					characters[i].GetComponent<Animator>().SetBool("IdleTransition", false);
+					characters[i].GetComponent<ButtonBehaviour>().HideButtons();
+
+			//	}
+
+
 			}
 		}
 

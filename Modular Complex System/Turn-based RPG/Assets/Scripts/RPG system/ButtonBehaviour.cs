@@ -18,6 +18,7 @@ namespace RPGsys {
 
 
 		public bool playerActivated;
+		public bool undoMove = false;
 		public List<Button> buttons;
 		public Button button;
 		public Text font;
@@ -43,6 +44,7 @@ namespace RPGsys {
 		Image mpBg;
 		Text hpTxt;
 		Text mpTxt;
+		Button goBackBtn;
 
 
 		private void Awake() {
@@ -140,6 +142,16 @@ namespace RPGsys {
 				count++;
 			}
 
+			//back button setup
+			if(transform.GetComponent<Character>().ChoiceOrder != 1) {
+				GameObject tmp = Instantiate(button.gameObject);
+				goBackBtn = tmp.GetComponent<Button>();
+				goBackBtn.transform.SetParent(menuBG.transform, false);
+				goBackBtn.name = "UNDO";
+				goBackBtn.GetComponentInChildren<Text>().text = "UNDO";
+				goBackBtn.onClick.AddListener(() => HandleClickBack());
+			}
+
 			//adding listeners to each button/settting active state to false
 			for(int i = 0; i < buttons.Count; i++) {
 				int capturedIndex = i;
@@ -161,7 +173,6 @@ namespace RPGsys {
 				pointerExit.callback.AddListener((data) => { OnPointerExit(data, capturedIndex); });
 				trigger.triggers.Add(pointerExit);
 			}
-
 			HideButtons();
 		}
 
@@ -228,6 +239,13 @@ namespace RPGsys {
 				}
 			}
 		}
+
+		//when UNDO button clicked, will return player to previous character turn screen
+		public void HandleClickBack() {
+			//playerActivated = true;
+			Debug.Log("UNDO CLICKED");
+			undoMove = true;
+	}
 
 		//use to have button info pop up on screen/clear
 		public void OnPointerEnter(BaseEventData data, int index) {

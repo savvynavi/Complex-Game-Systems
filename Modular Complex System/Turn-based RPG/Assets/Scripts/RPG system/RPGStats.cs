@@ -7,14 +7,17 @@ namespace RPGsys
 	public class RPGStats : MonoBehaviour
 	{
 
-		public enum DmgType
-		{
+		//change/add more as required
+		public enum DmgType{
+			None,
 			Physical,
-			Elemental
+			Magic,
+			Fire,
+			Ice,
+			Healing
 		}
 
-		public enum Stats
-		{
+		public enum Stats{
 			Speed,
 			Str,
 			Def,
@@ -26,8 +29,7 @@ namespace RPGsys
 			Agi
 		}
 
-		public enum ItemTypes
-		{
+		public enum ItemTypes{
 			Head,
 			Torso,
 			Legs,

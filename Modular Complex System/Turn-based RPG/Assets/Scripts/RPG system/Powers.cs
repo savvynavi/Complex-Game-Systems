@@ -28,6 +28,7 @@ namespace RPGsys
 
 		public float manaCost;
 		public float damage;
+		//possibly change this to a list to have multi-type abilities (eg, firebolt is both magic and fire type)
 		public RPGStats.DmgType dmgType;
 		public RPGStats.Stats statType;
 		public Target target;
