@@ -243,8 +243,9 @@ namespace RPGsys {
 		//when UNDO button clicked, will return player to previous character turn screen
 		public void HandleClickBack() {
 			//playerActivated = true;
+			FindObjectOfType<TurnBehaviour>().RemoveAttack();
 			undoMove = true;
-	}
+		}
 
 		//use to have button info pop up on screen/clear
 		public void OnPointerEnter(BaseEventData data, int index) {

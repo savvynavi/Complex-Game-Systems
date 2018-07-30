@@ -207,7 +207,7 @@ namespace RPGsys {
 				if(currentPlayer == previousPlayer) {
 					characters[currentPlayer].GetComponent<Animator>().SetBool("IdleTransition", true);
 					characters[i].GetComponent<ButtonBehaviour>().HideButtons();
-					turnBehaviour.MovesThisRound.RemoveAt(turnBehaviour.MovesThisRound.Count - 1);
+					//turnBehaviour.MovesThisRound.RemoveAt(turnBehaviour.MovesThisRound.Count - 1);
 					i = previousPlayer - 1;
 
 				} else {
@@ -226,6 +226,8 @@ namespace RPGsys {
 			confirmMenu.HideMenu();
 			if(redoTurn == true) {
 				Debug.Log("in the yield now going to player turn again");
+				turnBehaviour.MovesThisRound.Clear();
+				turnBehaviour.ResetTurnNumber();
 				yield return PlayerTurn();
 			}
 			yield return true;
