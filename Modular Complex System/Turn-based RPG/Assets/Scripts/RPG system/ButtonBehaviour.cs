@@ -243,7 +243,6 @@ namespace RPGsys {
 		//when UNDO button clicked, will return player to previous character turn screen
 		public void HandleClickBack() {
 			//playerActivated = true;
-			Debug.Log("UNDO CLICKED");
 			undoMove = true;
 	}
 

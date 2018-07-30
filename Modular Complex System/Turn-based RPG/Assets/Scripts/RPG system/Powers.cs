@@ -88,7 +88,36 @@ namespace RPGsys
 
 			//decrease target hp by damage amount + the chatacters given stat
 			if(obj.Mp - manaCost >= 0) {
-				target.Hp -= (damage + attMod);
+				//target.Hp -= (damage + attMod);
+				//Random.InitState(System.DateTime.Now.TimeOfDay.Milliseconds);
+				//SHUFFLEBAG MIGHT FIX BAD VALUES
+				//float rand = Random.Range(20, 110);
+				//Debug.Log("Rand Number: " + rand);
+				//float ToHit = rand + obj.GetComponent<Character>().Dex - target.GetComponent<Character>().Agi;
+				//Debug.Log("To Hit Number: " + ToHit);
+				//if(ToHit >= 100){
+				//	//hits target
+				//	target.Hp -= (damage + attMod);
+				//	Debug.Log("HIT TARGET");
+				//}
+
+				//damage output
+				float IncomingDmg = damage + attMod;
+				Debug.Log("Incoming Damage: " + IncomingDmg);
+				float dmgReduction = 0;
+
+				//if the attack type is either magic or physical it changes the mod
+				if(dmgType == RPGStats.DmgType.Physical){
+					dmgReduction = IncomingDmg * (target.Def / 100);
+				}else if(dmgType == RPGStats.DmgType.Magic){
+					dmgReduction = IncomingDmg * ((target.Int / 10)) / 100;
+				}
+
+				//get final damage output and subtract from target hp
+				IncomingDmg -= dmgReduction;
+				Debug.Log("damage Taken: " + IncomingDmg);
+				target.Hp -= IncomingDmg;
+				Debug.Log("Target HP: " + target.Hp);
 				obj.Mp -= manaCost;
 			}
 

@@ -77,6 +77,7 @@
      <Compile Include="Assets\Scripts\RPG system\EnemyBehaviour.cs" />
      <Compile Include="Assets\Scripts\RPG system\EnemyUI.cs" />
      <Compile Include="Assets\Scripts\RPG system\HoverTextStorage.cs" />
+     <Compile Include="Assets\Scripts\RPG system\MoveConfirmMenu.cs" />
      <Compile Include="Assets\Scripts\RPG system\Powers.cs" />
      <Compile Include="Assets\Scripts\RPG system\RPGStats.cs" />
      <Compile Include="Assets\Scripts\RPG system\StateManager.cs" />

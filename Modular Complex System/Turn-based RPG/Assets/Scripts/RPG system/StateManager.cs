@@ -190,26 +190,30 @@ namespace RPGsys {
 				}
 
 
-
-				while(characters[i].GetComponent<ButtonBehaviour>().playerActivated == false) {
-					if(characters[i].GetComponent<ButtonBehaviour>().undoMove == true) {
-						characters[i].GetComponent<ButtonBehaviour>().HideButtons();
-						characters[i].GetComponent<ButtonBehaviour>().undoMove = false;
+				int currentPlayer = i;
+				int previousPlayer = i - 1;
+				while(characters[currentPlayer].GetComponent<ButtonBehaviour>().playerActivated == false) {
+					//if undo button hit, sets current player to previous, sets undo to false
+					if(characters[currentPlayer].GetComponent<ButtonBehaviour>().undoMove == true) {
+						characters[currentPlayer].GetComponent<ButtonBehaviour>().undoMove = false;
+						characters[currentPlayer].GetComponent<ButtonBehaviour>().playerActivated = true;
 						Debug.Log("Undoing Action");
-						i--;
-						break;
+						currentPlayer = previousPlayer;
 					}
 					yield return null;
 				}
 
-				//cause UI to go back a character if button pressed
-				// else {
-					//sets character to animation to indicate that their move has passed
+				//if undo button hit, sets previous player to idle anim, hides buttons of current, removes the last set move and sets i to be 1 less than prev(does this as on next loop will auto i++)
+				if(currentPlayer == previousPlayer) {
+					characters[currentPlayer].GetComponent<Animator>().SetBool("IdleTransition", true);
+					characters[i].GetComponent<ButtonBehaviour>().HideButtons();
+					turnBehaviour.MovesThisRound.RemoveAt(turnBehaviour.MovesThisRound.Count - 1);
+					i = previousPlayer - 1;
+
+				} else {
 					characters[i].GetComponent<Animator>().SetBool("IdleTransition", false);
 					characters[i].GetComponent<ButtonBehaviour>().HideButtons();
-
-			//	}
-
+				}
 
 			}
 		}
