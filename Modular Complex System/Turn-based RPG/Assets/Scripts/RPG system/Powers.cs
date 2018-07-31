@@ -91,33 +91,46 @@ namespace RPGsys
 				//target.Hp -= (damage + attMod);
 				//Random.InitState(System.DateTime.Now.TimeOfDay.Milliseconds);
 				//SHUFFLEBAG MIGHT FIX BAD VALUES
-				//float rand = Random.Range(20, 110);
-				//Debug.Log("Rand Number: " + rand);
+				Debug.Log(obj.name);
+				float rand = Random.Range(0, 100);
+				Debug.Log("Rand Number: " + rand);
 				//float ToHit = rand + obj.GetComponent<Character>().Dex - target.GetComponent<Character>().Agi;
 				//Debug.Log("To Hit Number: " + ToHit);
-				//if(ToHit >= 100){
-				//	//hits target
-				//	target.Hp -= (damage + attMod);
-				//	Debug.Log("HIT TARGET");
-				//}
 
-				//damage output
-				float IncomingDmg = damage + attMod;
-				Debug.Log("Incoming Damage: " + IncomingDmg);
+				float accuracy = obj.Dex * 0.1f;
+				float dodge = target.Agi * 0.05f;
+				float chance = ((accuracy - dodge) / accuracy) * 100;
+
+				float evade = (255 - target.Agi) + 1;
+
+				float hit = (obj.Dex * 0.4f - evade) + 9;
+
+				//Debug.Log("accuracy Number: " + accuracy);
+				//Debug.Log("dodge Number: " + dodge);
+
+				Debug.Log("Chance to hit: " + chance);
+				float IncomingDmg = 0;
 				float dmgReduction = 0;
 
-				//if the attack type is either magic or physical it changes the mod
-				if(dmgType == RPGStats.DmgType.Physical){
-					dmgReduction = IncomingDmg * (target.Def / 100);
-				}else if(dmgType == RPGStats.DmgType.Magic){
-					dmgReduction = IncomingDmg * ((target.Int / 10)) / 100;
-				}
+				//if(hit >= rand) {
+					Debug.Log("HIT TARGET");
+					//damage output
+					IncomingDmg = damage + attMod;
+					//Debug.Log("Incoming Damage: " + IncomingDmg);
+
+					//if the attack type is either magic or physical it changes the mod
+					if(dmgType == RPGStats.DmgType.Physical) {
+						dmgReduction = IncomingDmg * (target.Def / 100);
+					} else if(dmgType == RPGStats.DmgType.Magic) {
+						dmgReduction = IncomingDmg * ((target.Int / 10)) / 100;
+					}
+				//}
 
 				//get final damage output and subtract from target hp
 				IncomingDmg -= dmgReduction;
-				Debug.Log("damage Taken: " + IncomingDmg);
+				//Debug.Log("damage Taken: " + IncomingDmg);
 				target.Hp -= IncomingDmg;
-				Debug.Log("Target HP: " + target.Hp);
+				//Debug.Log("Target HP: " + target.Hp);
 				obj.Mp -= manaCost;
 			}
 
