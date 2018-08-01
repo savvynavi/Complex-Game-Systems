@@ -88,8 +88,6 @@ namespace RPGsys
 
 			//decrease target hp by damage amount + the chatacters given stat
 			if(obj.Mp - manaCost >= 0) {
-				//target.Hp -= (damage + attMod);
-				//Random.InitState(System.DateTime.Now.TimeOfDay.Milliseconds);
 				//SHUFFLEBAG MIGHT FIX BAD VALUES
 				Debug.Log(obj.name);
 				float rand = Random.Range(0, 100);
@@ -103,16 +101,15 @@ namespace RPGsys
 
 				float evade = (255 - target.Agi) + 1;
 
-				float hit = (obj.Dex * 0.4f - evade) + 9;
+				//float hit = (obj.Dex * 0.4f - evade) + 9;
 
-				//Debug.Log("accuracy Number: " + accuracy);
-				//Debug.Log("dodge Number: " + dodge);
+				float hit = obj.Dex / (target.Agi + dodge);
 
 				Debug.Log("Chance to hit: " + chance);
 				float IncomingDmg = 0;
 				float dmgReduction = 0;
 
-				//if(hit >= rand) {
+				if(hit >= rand) {
 					Debug.Log("HIT TARGET");
 					//damage output
 					IncomingDmg = damage + attMod;
@@ -124,7 +121,7 @@ namespace RPGsys
 					} else if(dmgType == RPGStats.DmgType.Magic) {
 						dmgReduction = IncomingDmg * ((target.Int / 10)) / 100;
 					}
-				//}
+				}
 
 				//get final damage output and subtract from target hp
 				IncomingDmg -= dmgReduction;
