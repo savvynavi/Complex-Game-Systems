@@ -309,6 +309,7 @@
     <Compile Include="Assets\Scripts\LoadScene.cs" />
     <Compile Include="Assets\Scripts\RPG system\Buff.cs" />
     <Compile Include="Assets\Scripts\RPG system\ButtonBehaviour.cs" />
+    <Compile Include="Assets\Scripts\RPG system\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\RPG system\Character.cs" />
     <Compile Include="Assets\Scripts\RPG system\ClassInfo.cs" />
     <Compile Include="Assets\Scripts\RPG system\EnemyBehaviour.cs" />

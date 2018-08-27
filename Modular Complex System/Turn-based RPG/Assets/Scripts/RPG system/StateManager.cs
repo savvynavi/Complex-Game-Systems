@@ -29,10 +29,15 @@ namespace RPGsys {
 		public float startDelay;
 		public float endDelay;
 
+		CameraMovement camMovement;
+
 		// Use this for initialization
 		void Start() {
 			turnBehaviour = GetComponent<TurnBehaviour>();
 			confirmMenu = GetComponent<MoveConfirmMenu>();
+
+			camMovement = GetComponent<CameraMovement>();
+
 
 			endWait = new WaitForSeconds(endDelay);
 			characters = new List<Character>();
@@ -155,27 +160,6 @@ namespace RPGsys {
 				tmp += turnBehaviour.numOfTurns;
 				chara.GetComponent<Animator>().SetBool("IdleTransition", true);
 			}
-
-			//loop through characters and wait until input to move to next one
-			//foreach(Character chara in characters) {
-			//	//loops through and turns on only the UI/target cylinder for the current player
-			//	chara.GetComponent<ButtonBehaviour>().ShowButtons();
-			//	foreach(Character chara2 in characters) {
-			//		chara2.GetComponent<TargetSelection>().enabled = false;
-			//	}
-			//	chara.GetComponent<TargetSelection>().enabled = true;
-
-			//	if(chara.target != null) {
-			//		selector.transform.position = chara.target.transform.position;
-
-			//	}
-			//	while(chara.GetComponent<ButtonBehaviour>().playerActivated == false) {
-			//		yield return null;
-			//	}
-			//	//sets character to animation to indicate that their move has passed
-			//	chara.GetComponent<Animator>().SetBool("IdleTransition", false);
-			//	chara.GetComponent<ButtonBehaviour>().HideButtons();
-			//}
 
 			for(int i = 0; i < characters.Count; i++) {
 				characters[i].GetComponent<ButtonBehaviour>().ShowButtons();
@@ -307,22 +291,58 @@ namespace RPGsys {
 					if(info.player.target != null) {
 						//turn player towards target
 						info.player.transform.LookAt(info.player.target.transform);
+						
+						//camMovement.SetTransforms(info);
+						camMovement.LookAtAttacker(info.player);
+						yield return new WaitForSeconds(0.5f);
 
 						//does damage/animations
 						info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
 						string name = info.ability.anim.ToString();
 						info.player.GetComponent<Animator>().Play(name);
+
+						camMovement.LookAtTarget(info.player, info.player.target.GetComponent<Character>());
+						//turn all other players off for attack
+						foreach(Character chara in characters) {
+							if(chara != info.player) {
+								chara.gameObject.SetActive(false);
+							}
+						}
+
+						foreach(Character chara in enemies) {
+							if(chara != info.player.target.GetComponent<Character>()) {
+								chara.gameObject.SetActive(false);
+							}
+						}
+
 						info.player.target.GetComponent<Animator>().Play("TAKE_DAMAGE");
 						//if player character, will allow them to go back to isle anim 
 						if(info.player.tag != "Enemy") {
 							info.player.GetComponent<Animator>().SetBool("IdleTransition", true);
 						}
+
+
+						yield return new WaitForSeconds(3);
+						
 						//reset player rotation
 						float step = speed * Time.deltaTime;
 
 						//waits for attack anim to finish before spinning character back towards front
 						yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length - info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime);
 						info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
+						camMovement.Reset();
+
+						foreach(Character chara in characters) {
+							if(chara != info.player) {
+								chara.gameObject.SetActive(true);
+							}
+						}
+
+						foreach(Character chara in enemies) {
+							if(chara != info.player.target.GetComponent<Character>()) {
+								chara.gameObject.SetActive(true);
+							}
+						}
 					}
 				}
 
