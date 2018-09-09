@@ -9,26 +9,23 @@ namespace RPGsys {
 	public class StateManager : MonoBehaviour {
 		public bool confirmMoves = false;
 		public bool redoTurn = false;
-		WaitForSeconds endWait;
-		List<Character> characters;
-		List<Character> enemies;
-		TurnBehaviour turnBehaviour;
-		EnemyBehaviour[] enemyBehav;
-		int rand;
-		Quaternion originalRotation;
-
-		GameObject GameOverUI;
-		GameObject GameOverTextLose;
-		GameObject GameOverTextWin;
-		MoveConfirmMenu confirmMenu;
-
 		public float speed;
 		public Button MainMenu;
 		public Button Quit;
 		public GameObject selector;
-		public float startDelay;
-		public float endDelay;
 
+		int rand;
+		List<Character> characters;
+		List<Character> enemies;
+		List<Character> deadCharactersREVIVE;
+		List<Character> storeTargets;
+		TurnBehaviour turnBehaviour;
+		EnemyBehaviour[] enemyBehav;
+		Quaternion originalRotation;
+		GameObject GameOverUI;
+		GameObject GameOverTextLose;
+		GameObject GameOverTextWin;
+		MoveConfirmMenu confirmMenu;
 		CameraMovement camMovement;
 
 		// Use this for initialization
@@ -37,9 +34,8 @@ namespace RPGsys {
 			confirmMenu = GetComponent<MoveConfirmMenu>();
 
 			camMovement = GetComponent<CameraMovement>();
+			storeTargets = new List<Character>();
 
-
-			endWait = new WaitForSeconds(endDelay);
 			characters = new List<Character>();
 			enemies = new List<Character>();
 			enemyBehav = FindObjectsOfType<EnemyBehaviour>();
@@ -81,6 +77,16 @@ namespace RPGsys {
 
 			foreach(Character chara in characters) {
 				chara.GetComponent<ButtonBehaviour>().Setup();
+			}
+
+			List<Character> tmpList = new List<Character>();
+			//when battle reentered, forces any dead characters to act like it
+			foreach(Character chara in characters) {
+				Debug.Log(chara.name + "'s HP: " + chara.Hp);
+				if(chara.Hp <= 0) {
+					tmpList.Add(chara);
+					Death(chara, tmpList);
+				}
 			}
 
 			//shows enemy ui
@@ -161,6 +167,7 @@ namespace RPGsys {
 				chara.GetComponent<Animator>().SetBool("IdleTransition", true);
 			}
 
+			//loop through characters and wait until input to move to next one
 			for(int i = 0; i < characters.Count; i++) {
 				characters[i].GetComponent<ButtonBehaviour>().ShowButtons();
 				foreach(Character chara2 in characters) {
@@ -168,11 +175,13 @@ namespace RPGsys {
 				}
 				characters[i].GetComponent<TargetSelection>().enabled = true;
 
+				//selector only visible if the target isn't null
 				if(characters[i].target != null) {
+					selector.gameObject.SetActive(true);
 					selector.transform.position = characters[i].target.transform.position;
-
+				} else {
+					selector.gameObject.SetActive(false);
 				}
-
 
 				int currentPlayer = i;
 				int previousPlayer = i - 1;
@@ -268,87 +277,134 @@ namespace RPGsys {
 			List<TurnBehaviour.TurnInfo> sortedList = turnBehaviour.MovesThisRound.OrderByDescending(o => o.player.Speed).ToList();
 			turnBehaviour.MovesThisRound = sortedList;
 
+			//each loop is a players turn
 			foreach(TurnBehaviour.TurnInfo info in turnBehaviour.MovesThisRound) {
 				originalRotation = info.player.transform.rotation;
 				if(info.player.Hp > 0) {
 					info.player.Timer();
-					if(info.player.target == null) {
-						rand = Random.Range(0, enemies.Count);
-						info.player.target = enemies[rand].gameObject;
+					//died due to effect SET UP BETTER DEATH CHECK SYSTEM THIS IS GETTING SILLY
+					if(info.player.Hp <= 0) {
+						List<Character> tmp = new List<Character>();
+						tmp.Add(info.player);
+						Death(info.player, tmp);
 					}
-					if(info.player.target.GetComponent<Character>().Hp <= 0) {
-						//add check if target is dead, if so randomly selects enemy to fight
-						for(int i = 0; i < enemies.Count; i++) {
-							if(enemies[i].GetComponent<Character>().Hp > 0) {
-								info.player.target = enemies[i].gameObject;
-								break;
+
+					if(info.player.Hp > 0) {
+						if(info.player.target == null) {
+							rand = Random.Range(0, enemies.Count);
+							info.player.target = enemies[rand].gameObject;
+						}
+						if(info.player.target.GetComponent<Character>().Hp <= 0) {
+							//add check if target is dead, if so randomly selects enemy to fight
+							for(int i = 0; i < enemies.Count; i++) {
+								if(enemies[i].GetComponent<Character>().Hp > 0) {
+									info.player.target = enemies[i].gameObject;
+									break;
+								} else {
+									info.player.target = null;
+								}
+							}
+						}
+
+						if(info.player.target != null) {
+							//turn player towards target
+							info.player.transform.LookAt(info.player.target.transform);
+							camMovement.LookAtAttacker(info.player);
+							yield return new WaitForSeconds(0.5f);
+
+
+							//does damage/animations
+							if(info.ability.areaOfEffect == Powers.AreaOfEffect.Group) {
+
+								if(info.player.target.tag == "Player") {
+									AddToStoredList(characters);
+								} else {
+									AddToStoredList(enemies);
+								}
+								camMovement.LookAtGroup(storeTargets);
+
+								if(info.player.target.tag == "Player") {
+									GroupAttack(info, characters, storeTargets);
+								} else {
+									GroupAttack(info, enemies, storeTargets);
+								}
+
+
+							} else if(info.ability.areaOfEffect == Powers.AreaOfEffect.Single) {
+
+								//if same team, use facecam, else single out enemy target
+								if(info.player.tag == info.player.target.tag) {
+									camMovement.LookAtAttacker(info.player.target.GetComponent<Character>());
+								} else {
+									camMovement.LookAtTarget(info.player, info.player.target.GetComponent<Character>());
+								}
+
+
+								info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
+								string name = info.ability.anim.ToString();
+								info.player.GetComponent<Animator>().Play(name);
+
+
+
+								info.player.target.GetComponent<Animator>().Play("TAKE_DAMAGE");
+								//if player character, will allow them to go back to isle anim 
+								if(info.player.tag != "Enemy") {
+									info.player.GetComponent<Animator>().SetBool("IdleTransition", true);
+								}
+								storeTargets.Add(info.player.target.GetComponent<Character>());
 							} else {
-								info.player.target = null;
+								storeTargets = null;
 							}
-						}
-					}
 
-					if(info.player.target != null) {
-						//turn player towards target
-						info.player.transform.LookAt(info.player.target.transform);
-						
-						//camMovement.SetTransforms(info);
-						camMovement.LookAtAttacker(info.player);
-						yield return new WaitForSeconds(0.5f);
+							//foreach(Character chara in characters) {
+							//	if(chara != info.player && chara != info.player.target.GetComponent) {
+							//		chara.gameObject.SetActive(false);
+							//	}
+							//}
 
-						//does damage/animations
-						info.ability.Apply(info.player, info.player.target.GetComponent<Character>());
-						string name = info.ability.anim.ToString();
-						info.player.GetComponent<Animator>().Play(name);
+							//foreach(Character enem in enemies) {
+							//	if(enem != info.player && enem != info.player.target) {
+							//		enem.gameObject.SetActive(false);
+							//	}
+							//}
 
-						camMovement.LookAtTarget(info.player, info.player.target.GetComponent<Character>());
-						//turn all other players off for attack
-						foreach(Character chara in characters) {
-							if(chara != info.player) {
-								chara.gameObject.SetActive(false);
-							}
-						}
-
-						foreach(Character chara in enemies) {
-							if(chara != info.player.target.GetComponent<Character>()) {
-								chara.gameObject.SetActive(false);
-							}
-						}
-
-						info.player.target.GetComponent<Animator>().Play("TAKE_DAMAGE");
-						//if player character, will allow them to go back to isle anim 
-						if(info.player.tag != "Enemy") {
-							info.player.GetComponent<Animator>().SetBool("IdleTransition", true);
-						}
+							yield return new WaitForSeconds(1.5f);
 
 
-						yield return new WaitForSeconds(3);
-						
-						//reset player rotation
-						float step = speed * Time.deltaTime;
 
-						//waits for attack anim to finish before spinning character back towards front
-						yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length - info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime);
-						info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
-						camMovement.Reset();
+							//reset player rotation
+							float step = speed * Time.deltaTime;
 
-						foreach(Character chara in characters) {
-							if(chara != info.player) {
-								chara.gameObject.SetActive(true);
-							}
+							//waits for attack anim to finish before spinning character back towards front
+							yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length - info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime);
+							info.player.transform.rotation = Quaternion.Slerp(info.player.transform.rotation, originalRotation, speed);
+							camMovement.Reset();
+
+							//foreach(Character chara in characters) {
+							//	if(chara != info.player || chara != info.player.target) {
+							//		chara.gameObject.SetActive(true);
+							//	}
+							//}
+
+							//foreach(Character enem in enemies) {
+							//	if(enem != info.player || enem != info.player.target) {
+							//		enem.gameObject.SetActive(true);
+							//	}
+							//}
 						}
 
-						foreach(Character chara in enemies) {
-							if(chara != info.player.target.GetComponent<Character>()) {
-								chara.gameObject.SetActive(true);
-							}
-						}
 					}
 				}
 
 				yield return new WaitForSeconds(info.player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(1).length + 1.5f);
-				if(info.player.target != null) {
-					Death(info);
+
+				if(storeTargets != null) {
+					Death(info.player.target.GetComponent<Character>(), storeTargets);
+				}
+				//if either side dead already, end fight
+				if(BattleOver() == true) {
+					yield return EndBattle();
+					break;
 				}
 			}
 
@@ -359,22 +415,46 @@ namespace RPGsys {
 			yield return new WaitForSeconds(0.5f);
 		}
 
-		public void Death(TurnBehaviour.TurnInfo attackerInfo) {
-			Character attackerTarget = attackerInfo.player.target.GetComponent<Character>();
+		public IEnumerator EndBattle() {
+			// Cleanup button behaviours
+			List<ButtonBehaviour> buttonBehaviours = new List<ButtonBehaviour>();
 
-			if(attackerTarget != null) {
-				if(attackerTarget.Hp <= 0) {
-					attackerTarget.Hp = 0;
-					attackerTarget.GetComponent<Animator>().Play("DEAD");
+			turnBehaviour.MovesThisRound.Clear();
 
-					//remove buff effects on death
-					foreach(Buff buff in attackerTarget.currentEffects) {
-						buff.UpdateEffect(attackerTarget);
-					}
+			foreach(Character chara in characters) {
+				chara.GetComponent<Animator>().SetBool("IdleTransition", true);
+			}
 
-					if(attackerTarget.gameObject.tag == "Enemy") {
-						attackerTarget.GetComponent<EnemyUI>().HideUI();
-						attackerTarget.GetComponent<Collider>().enabled = false;
+			GameOverUI.SetActive(true);
+			if(Alive() == true) {
+				GameOverTextWin.SetActive(true);
+			} else if(EnemyAlive() == true) {
+				GameOverTextLose.SetActive(true);
+			}
+			yield return new WaitForSeconds(0.5f);
+		}
+
+		public void Death(Character attackerTarget, List<Character> targets) {
+			//if no list given, do 1 target, else loop over all targets
+			if(targets != null) {
+				foreach(Character target in targets) {
+					if(target.Hp <= 0) {
+						target.Hp = 0;
+						target.GetComponent<Animator>().Play("DEAD");
+
+						foreach(Buff buff in target.currentEffects) {
+							buff.UpdateEffect(target);
+						}
+
+						if(target.gameObject.tag == "Enemy") {
+							target.GetComponent<EnemyUI>().HideUI();
+							target.GetComponent<Collider>().enabled = false;
+
+						}
+						//if it's a player it is added to the deadCharacter list, will be used for revives in battle
+						if(target.gameObject.tag == "Player") {
+							deadCharactersREVIVE.Add(target);
+						}
 					}
 				}
 			}
@@ -397,6 +477,27 @@ namespace RPGsys {
 				}
 			}
 			return false;
+		}
+
+		public void AddToStoredList(List<Character> targets) {
+			foreach(Character chara in targets) {
+				storeTargets.Add(chara);
+			}
+		}
+
+		public void GroupAttack(TurnBehaviour.TurnInfo info, List<Character> targets, List<Character> storeTargets) {
+			foreach(Character chara in targets) {
+				info.ability.Apply(info.player, chara);
+				string name = info.ability.anim.ToString();
+				info.player.GetComponent<Animator>().Play(name);
+				chara.GetComponent<Animator>().Play("TAKE_DAMAGE");
+				//storeTargets.Add(chara);
+			}
+
+			//if player character, will allow them to go back to isle anim 
+			if(info.player.tag != "Enemy") {
+				info.player.GetComponent<Animator>().SetBool("IdleTransition", true);
+			}
 		}
 
 		public bool BattleOver() {

@@ -15,7 +15,7 @@ MonoBehaviour:
   damage: 0
   dmgType: 0
   statType: 4
-  target: 1
+  areaOfEffect: 0
   anim: 2
   powName: Strengthen
   description: Buffs Strength by 15 for 4 turns

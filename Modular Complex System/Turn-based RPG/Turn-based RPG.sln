@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turn-based RPG", "Turn-base
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turn-based RPG.Plugins", "Turn-based RPG.Plugins.csproj", "{6D7EC113-86FB-33B7-003D-7E3EAC06F576}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turn-based RPG.Editor", "Turn-based RPG.Editor.csproj", "{AA226F6A-A61F-27DC-730C-FA4972B4F2A7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turn-based RPG.Editor.Plugins", "Turn-based RPG.Editor.Plugins.csproj", "{7A17BA93-2819-D7B7-8073-B844C9351680}"
 EndProject
 Global
@@ -21,6 +23,10 @@ Global
 		{6D7EC113-86FB-33B7-003D-7E3EAC06F576}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D7EC113-86FB-33B7-003D-7E3EAC06F576}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D7EC113-86FB-33B7-003D-7E3EAC06F576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA226F6A-A61F-27DC-730C-FA4972B4F2A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA226F6A-A61F-27DC-730C-FA4972B4F2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA226F6A-A61F-27DC-730C-FA4972B4F2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA226F6A-A61F-27DC-730C-FA4972B4F2A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A17BA93-2819-D7B7-8073-B844C9351680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A17BA93-2819-D7B7-8073-B844C9351680}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A17BA93-2819-D7B7-8073-B844C9351680}.Release|Any CPU.ActiveCfg = Release|Any CPU

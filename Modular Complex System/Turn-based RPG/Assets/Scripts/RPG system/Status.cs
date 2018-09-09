@@ -8,15 +8,19 @@ namespace RPGsys{
 
 		public ParticleSystem particles;
 		public Material material;
+		public Shader shader;
 		protected GameObject partInst;
 		protected Material matInst;
+		protected Shader shaderInst;
+		protected List<Shader> charaShaders;
 		bool particleRunning;
 
 		//public Animation anim;
 		public enum StatusEffectType {
 			Buff,
 			Debuff,
-			Heal
+			Heal,
+			DamageOverTime
 		}
 
 		public enum StatusEffectTarget {
@@ -41,6 +45,16 @@ namespace RPGsys{
 			}
 			if(material != null && (timer < 1 || chara.Hp <= 0)) {
 				chara.gameObject.GetComponentInChildren<Renderer>().material = originalMaterial;
+			}
+			if(shader != null && (timer < 1 || chara.Hp <= 0)) {
+
+				foreach(Renderer shad in chara.GetComponentsInChildren<Renderer>()) {
+					//shad.material.shader = shaderInst;
+					if(shad.GetComponent<ParticleSystem>() == null) {
+						//edit here if models don't use the standard shader (eg are legacy ones)
+						shad.material.shader = Shader.Find("Standard");
+					}
+				}
 			}
 		}
 
@@ -69,6 +83,17 @@ namespace RPGsys{
 				
 				target.gameObject.GetComponentInChildren<Renderer>().material = matInst;
 				
+			}
+
+			if(shader != null) {
+				//shaderInst = Instantiate(shader);
+				//CAN'T INSTANTIATE SHADERS OR ELSE IT CRASHES THE BUILD
+				shaderInst = shader;
+				foreach(Renderer shad in target.GetComponentsInChildren<Renderer>()) {
+					if(shad.GetComponent<ParticleSystem>() == null) {
+						shad.material.shader = shaderInst;
+					}
+				}
 			}
 		}
 	}

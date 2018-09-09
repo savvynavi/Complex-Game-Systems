@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: Strong
   m_EditorClassIdentifier: 
   particles: {fileID: 0}
-  material: {fileID: 2100000, guid: c6ba578bb72862e4d85f78a32ed8bbad, type: 2}
+  material: {fileID: 0}
+  shader: {fileID: 4800000, guid: 49751a9953ea8dd4ba7a742238f0709f, type: 3}
   timer: 0
   StatusEffects:
     effect: 0
